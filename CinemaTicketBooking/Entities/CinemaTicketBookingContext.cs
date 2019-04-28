@@ -25,6 +25,7 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblPromotion> TblPromotion { get; set; }
         public virtual DbSet<TblReservations> TblReservations { get; set; }
         public virtual DbSet<TblReservationStatus> TblReservationStatus { get; set; }
+        public virtual DbSet<TblSeat> TblSeat { get; set; }
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
 
@@ -32,15 +33,6 @@ namespace CinemaTicketBooking.Entities
     : base(options)
         {
         }
-
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
-        //            }
-        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -704,6 +696,10 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
+                entity.Property(e => e.ReservationStatusName)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblReservationStatusCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
@@ -715,6 +711,37 @@ namespace CinemaTicketBooking.Entities
                     .HasForeignKey(d => d.LastModifiedByUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_ReservationStatus_AspNetUsers1");
+            });
+
+            modelBuilder.Entity<TblSeat>(entity =>
+            {
+                entity.HasKey(e => e.SeatId);
+
+                entity.ToTable("tbl_Seat");
+
+                entity.Property(e => e.CreatedByUserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.CreatedOnDate)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.LastModifiedByUserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+
+                entity.Property(e => e.SeatNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Cinema)
+                    .WithMany(p => p.TblSeat)
+                    .HasForeignKey(d => d.CinemaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_Seat_tbl_Cinema");
             });
 
             modelBuilder.Entity<TblShowTime>(entity =>
@@ -790,10 +817,6 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.SeatNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.TotalPrice)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -827,6 +850,12 @@ namespace CinemaTicketBooking.Entities
                     .HasForeignKey(d => d.MovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Ticket_tbl_Movie");
+
+                entity.HasOne(d => d.Seat)
+                    .WithMany(p => p.TblTicket)
+                    .HasForeignKey(d => d.SeatId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_Ticket_tbl_Seat");
             });
         }
     }

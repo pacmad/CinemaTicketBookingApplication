@@ -11,7 +11,7 @@ namespace CinemaTicketBooking.Entities
         }
 
         public int ReservationStatusId { get; set; }
-        public int ReservationStatusName { get; set; }
+        public string ReservationStatusName { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string CreatedOnDate { get; set; }
