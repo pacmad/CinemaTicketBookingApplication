@@ -39,7 +39,9 @@ namespace CinemaTicketBooking.Repository
 
         public bool EditCinema(TblCinema cinema)
         {
-            throw new NotImplementedException();
+            _context.TblCinema.Update(cinema);
+            _context.Entry(cinema).State = EntityState.Modified;
+            return _context.SaveChanges() > 0;
         }
 
         public List<TblCinema> GetAllCinemas()

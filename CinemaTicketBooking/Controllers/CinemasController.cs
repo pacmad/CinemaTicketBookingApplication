@@ -45,9 +45,9 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var myCinema = await _cinemaService.GetCinemaById(id??1);
+            var myCinema = await _cinemaService.GetCinemaById(id ?? 1);
 
-            if(myCinema == null)
+            if (myCinema == null)
             {
                 return NotFound();
             }
@@ -99,52 +99,59 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var tblCinema = await _context.TblCinema.SingleOrDefaultAsync(m => m.CinemaId == id);
+            var tblCinema = await _cinemaService.GetCinemaById(id ?? 1);
+
             if (tblCinema == null)
             {
                 return NotFound();
             }
-            ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.AdminUserId);
-            ViewData["AdressId"] = new SelectList(_context.TblAddress, "AdressId", "CreatedByUserId", tblCinema.AdressId);
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.CreatedByUserId);
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.LastModifiedByUserId);
+
+            ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "UserName", tblCinema.AdminUserId);
+            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName", tblCinema.Adress.CountryId);
+            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName", tblCinema.Adress.CityId);
+
+            tblCinema.AdressId = tblCinema.Adress.AdressId;
+            tblCinema.StreetName = tblCinema.Adress.StreetName;
+
             return View(tblCinema);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CinemaId,AdminUserId,CinemaName,CinemaDescription,CinemaProfilePicture,AdressId,CreatedByUserId,LastModifiedByUserId,CreatedOnDate,LastModifiedOnDate,IsDeleted")] TblCinema tblCinema)
+        public async Task<IActionResult> Edit(int id, CinemaViewModel model)
         {
-            if (id != tblCinema.CinemaId)
+            if (id != model.CinemaId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+                string mail = user?.Email;
+
+                model.LastModifiedByUserId = userId;
+
+                if (!ModelState.IsValid)
                 {
-                    _context.Update(tblCinema);
-                    await _context.SaveChangesAsync();
+                    return BadRequest();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                var cinemaAdded = _cinemaService.EditCinema(model);
+
+                if (cinemaAdded)
                 {
-                    if (!TblCinemaExists(tblCinema.CinemaId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+
             }
-            ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.AdminUserId);
-            ViewData["AdressId"] = new SelectList(_context.TblAddress, "AdressId", "CreatedByUserId", tblCinema.AdressId);
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.CreatedByUserId);
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.LastModifiedByUserId);
-            return View(tblCinema);
+            else
+            {
+                return View(model);
+            }
+
+            return BadRequest();
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -154,9 +161,9 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var myCinema = await _cinemaService.GetCinemaById(id??0);
+            var myCinema = await _cinemaService.GetCinemaById(id ?? 0);
 
-            if(myCinema != null)
+            if (myCinema != null)
             {
                 return View(myCinema);
             }
@@ -188,6 +195,7 @@ namespace CinemaTicketBooking.Controllers
         {
             return _context.TblCinema.Any(e => e.CinemaId == id);
         }
+
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

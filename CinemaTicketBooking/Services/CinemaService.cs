@@ -83,7 +83,14 @@ namespace CinemaTicketBooking.Services
 
         public bool EditCinema(CinemaViewModel cinema)
         {
-            throw new NotImplementedException();
+            var cinemaToEdit = _cinemaRepository.GetCinemaById(cinema.CinemaId);
+            cinemaToEdit.CinemaName = cinema.CinemaName;
+            cinemaToEdit.CinemaDescription = cinema.CinemaDescription;
+            cinemaToEdit.CinemaName = cinema.CinemaName;
+            cinemaToEdit.LastModifiedByUserId = cinema.LastModifiedByUserId;
+            cinemaToEdit.LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
+
+            return _cinemaRepository.EditCinema(cinemaToEdit);          
         }
 
         public IEnumerable<CinemaViewModel> GetAllCinemas()

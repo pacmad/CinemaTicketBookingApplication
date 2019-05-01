@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CinemaTicketBooking.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.Repository
 {
@@ -26,9 +27,11 @@ namespace CinemaTicketBooking.Repository
             throw new NotImplementedException();
         }
 
-        public bool EditAddress(TblAddress cinema)
+        public bool EditAddress(TblAddress address)
         {
-            throw new NotImplementedException();
+            _context.TblAddress.Update(address);
+            _context.Entry(address).State = EntityState.Modified;
+            return _context.SaveChanges() > 0;
         }
 
         public TblAddress GetAddressById(int id)
