@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using CinemaTicketBooking.Data;
 using CinemaTicketBooking.Models;
 using CinemaTicketBooking.Services;
+using CinemaTicketBooking.Entities;
+using CinemaTicketBooking.Repository;
 
 namespace CinemaTicketBooking
 {
@@ -29,12 +31,17 @@ namespace CinemaTicketBooking
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CinemaTicketBooking")));
 
+            services.AddDbContext<CinemaTicketBookingContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("CinemaTicketBooking")));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ICinemaService, CinemaService>();
+            services.AddScoped<ICinemaRepostiory, CinemaRepository>();
 
             services.AddMvc();
         }

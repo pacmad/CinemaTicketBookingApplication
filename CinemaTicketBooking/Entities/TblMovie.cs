@@ -21,10 +21,10 @@ namespace CinemaTicketBooking.Entities
         public string MovieDescription { get; set; }
         public string ReleaseDate { get; set; }
         public string MovieLength { get; set; }
-        public decimal PriceForAdults { get; set; }
-        public decimal PriceForChildrens { get; set; }
+        public string PriceForAdults { get; set; }
+        public string PriceForChildrens { get; set; }
         public string ShowTimeIds { get; set; }
-        public double? Rating { get; set; }
+        public string Rating { get; set; }
         public int LanguageId { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }

@@ -1,0 +1,82 @@
+﻿@model CinemaTicketBooking.Entities.TblCinema
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>TblCinema</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CinemaId" />
+            <div class="form-group">
+                <label asp-for="AdminUserId" class="control-label"></label>
+                <select asp-for="AdminUserId" class="form-control" asp-items="ViewBag.AdminUserId"></select>
+                <span asp-validation-for="AdminUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CinemaName" class="control-label"></label>
+                <input asp-for="CinemaName" class="form-control" />
+                <span asp-validation-for="CinemaName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CinemaDescription" class="control-label"></label>
+                <input asp-for="CinemaDescription" class="form-control" />
+                <span asp-validation-for="CinemaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CinemaProfilePicture" class="control-label"></label>
+                <input asp-for="CinemaProfilePicture" class="form-control" />
+                <span asp-validation-for="CinemaProfilePicture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdressId" class="control-label"></label>
+                <select asp-for="AdressId" class="form-control" asp-items="ViewBag.AdressId"></select>
+                <span asp-validation-for="AdressId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedByUserId" class="control-label"></label>
+                <select asp-for="CreatedByUserId" class="form-control" asp-items="ViewBag.CreatedByUserId"></select>
+                <span asp-validation-for="CreatedByUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastModifiedByUserId" class="control-label"></label>
+                <select asp-for="LastModifiedByUserId" class="form-control" asp-items="ViewBag.LastModifiedByUserId"></select>
+                <span asp-validation-for="LastModifiedByUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOnDate" class="control-label"></label>
+                <input asp-for="CreatedOnDate" class="form-control" />
+                <span asp-validation-for="CreatedOnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastModifiedOnDate" class="control-label"></label>
+                <input asp-for="LastModifiedOnDate" class="form-control" />
+                <span asp-validation-for="LastModifiedOnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

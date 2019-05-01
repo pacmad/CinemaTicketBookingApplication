@@ -1,0 +1,79 @@
+﻿@model CinemaTicketBooking.Entities.TblCinema
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TblCinema</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CinemaName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CinemaName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CinemaDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CinemaDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CinemaProfilePicture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CinemaProfilePicture)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOnDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedOnDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedOnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdminUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdminUser.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Adress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Adress.CreatedByUserId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedByUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByUser.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedByUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedByUser.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CinemaId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

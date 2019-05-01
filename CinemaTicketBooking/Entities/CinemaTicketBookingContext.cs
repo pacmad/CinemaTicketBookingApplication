@@ -6,6 +6,16 @@ namespace CinemaTicketBooking.Entities
 {
     public partial class CinemaTicketBookingContext : DbContext
     {
+        public CinemaTicketBookingContext()
+        {
+
+        }
+
+        public CinemaTicketBookingContext(DbContextOptions<CinemaTicketBookingContext> options)
+    : base(options)
+        {
+        }
+
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -29,9 +39,13 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
 
-        public CinemaTicketBookingContext(DbContextOptions<CinemaTicketBookingContext> options)
-    : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                //                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -195,9 +209,7 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(250);
 
-                entity.Property(e => e.CinemaProfilePicture)
-                    .IsRequired()
-                    .HasMaxLength(2500);
+                entity.Property(e => e.CinemaProfilePicture).HasMaxLength(2500);
 
                 entity.Property(e => e.CreatedByUserId)
                     .IsRequired()
@@ -434,9 +446,15 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(250);
 
-                entity.Property(e => e.PriceForAdults).HasColumnType("decimal(2, 2)");
+                entity.Property(e => e.PriceForAdults)
+                    .IsRequired()
+                    .HasMaxLength(250);
 
-                entity.Property(e => e.PriceForChildrens).HasColumnType("decimal(2, 2)");
+                entity.Property(e => e.PriceForChildrens)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Rating).HasMaxLength(250);
 
                 entity.Property(e => e.ReleaseDate)
                     .IsRequired()
@@ -763,6 +781,10 @@ namespace CinemaTicketBooking.Entities
                     .HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+
+                entity.Property(e => e.Time)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.HasOne(d => d.Cinema)
                     .WithMany(p => p.TblShowTime)

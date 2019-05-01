@@ -6,6 +6,7 @@ namespace CinemaTicketBooking.Entities
     public partial class TblShowTime
     {
         public int ShowTimeId { get; set; }
+        public string Time { get; set; }
         public int CinemaId { get; set; }
         public int MovieId { get; set; }
         public string CreatedByUserId { get; set; }
