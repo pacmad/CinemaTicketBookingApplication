@@ -8,7 +8,7 @@
 <h2>List of all cinemas</h2>
 
 <p>
-    <a asp-action="Create">Add new cinema</a>
+    <a role="button" class="btn btn-success" asp-action="Create">Add new cinema</a>
 </p>
 <table class="table">
     <thead>
@@ -38,28 +38,28 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="col-md-1">
                     @Html.DisplayFor(modelItem => item.CinemaName)
                 </td>
-                <td>
+                <td class="col-md-1">
                     @Html.DisplayFor(modelItem => item.CinemaDescription)
                 </td>
-                <td>
+                <td class="col-md-1">
                     @Html.DisplayFor(modelItem => item.CreatedOnDate)
                 </td>
-                <td>
+                <td class="col-md-1">
                     @Html.DisplayFor(modelItem => item.AdminUser.UserName)
                 </td>
-                <td>
+                <td class="col-md-2">
                     @Html.DisplayFor(modelItem => item.Adress.StreetName)
                 </td>
-                <td>
+                <td class="col-md-1">
                     @Html.DisplayFor(modelItem => item.CreatedByUser.UserName)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.CinemaId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
+                    <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a> 
+                    <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.CinemaId">Details</a>
+                    <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
                 </td>
             </tr>
         }

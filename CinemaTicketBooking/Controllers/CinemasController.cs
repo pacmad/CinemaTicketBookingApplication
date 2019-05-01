@@ -156,21 +156,19 @@ namespace CinemaTicketBooking.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var myCinema = await _cinemaService.GetCinemaById(id ?? 0);
+            var myCinema = await _cinemaService.GetCinemaById(id ?? 1);
 
-            if (myCinema != null)
-            {
-                return View(myCinema);
-            }
-            else
+            if (myCinema == null)
             {
                 return NotFound();
             }
+
+            return View(myCinema);
 
         }
 
