@@ -10,6 +10,7 @@ using CinemaTicketBooking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using CinemaTicketBooking.Services;
+using CinemaTicketBooking.Models.SuperAdminViewModels;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -31,14 +32,12 @@ namespace CinemaTicketBooking.Controllers
             _cinemaService = cinemaService;
         }
 
-        // GET: Cinemas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var cinemaTicketBookingContext = _context.TblCinema.Include(t => t.AdminUser).Include(t => t.Adress).Include(t => t.CreatedByUser).Include(t => t.LastModifiedByUser).Where(r=>r.IsDeleted == false);
-            return View(await cinemaTicketBookingContext.ToListAsync());
+            var listOfAllCinemas = _cinemaService.GetAllCinemas();
+            return View(listOfAllCinemas.ToList());
         }
 
-        // GET: Cinemas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,63 +45,53 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var tblCinema = await _context.TblCinema
-                .Include(t => t.AdminUser)
-                .Include(t => t.Adress)
-                .Include(t => t.CreatedByUser)
-                .Include(t => t.LastModifiedByUser)
-                .SingleOrDefaultAsync(m => m.CinemaId == id);
-            if (tblCinema == null)
+            var myCinema = await _cinemaService.GetCinemaById(id??1);
+
+            if(myCinema == null)
             {
                 return NotFound();
             }
 
-            return View(tblCinema);
+            return View(myCinema);
+
         }
 
-        // GET: Cinemas/Create
         public IActionResult Create()
         {
             ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
-            ViewData["AdressId"] = new SelectList(_context.TblAddress, "AdressId", "StreetName");
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
+            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
+
             return View();
         }
 
-        // POST: Cinemas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CinemaId,AdminUserId,CinemaName,CinemaDescription,CinemaProfilePicture,AdressId,CreatedByUserId,LastModifiedByUserId,CreatedOnDate,LastModifiedOnDate,IsDeleted")] TblCinema tblCinema)
+        public async Task<IActionResult> Create(CinemaViewModel model)
         {
             var user = await GetCurrentUserAsync();
             var userId = user?.Id;
             string mail = user?.Email;
 
-            tblCinema.CreatedByUserId = userId;
-            tblCinema.LastModifiedByUserId = userId;
-            tblCinema.CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
-            tblCinema.LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
-            tblCinema.IsDeleted = false;
+            model.CreatedByUserId = userId;
+            model.LastModifiedByUserId = userId;
 
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(tblCinema);
-                await _context.SaveChangesAsync();
+                return BadRequest();
+            }
+
+            var cinemaAdded = _cinemaService.AddCinema(model);
+
+
+            if (cinemaAdded)
+            {
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblCinema.AdminUserId);
-            ViewData["AdressId"] = new SelectList(_context.TblAddress, "AdressId", "CreatedByUserId", tblCinema.AdressId);
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", userId);
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", userId);
-            return View(tblCinema);
+            return BadRequest();
         }
 
-        // GET: Cinemas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,9 +111,6 @@ namespace CinemaTicketBooking.Controllers
             return View(tblCinema);
         }
 
-        // POST: Cinemas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CinemaId,AdminUserId,CinemaName,CinemaDescription,CinemaProfilePicture,AdressId,CreatedByUserId,LastModifiedByUserId,CreatedOnDate,LastModifiedOnDate,IsDeleted")] TblCinema tblCinema)
@@ -161,7 +147,6 @@ namespace CinemaTicketBooking.Controllers
             return View(tblCinema);
         }
 
-        // GET: Cinemas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
@@ -182,7 +167,6 @@ namespace CinemaTicketBooking.Controllers
 
         }
 
-        // POST: Cinemas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -204,7 +188,6 @@ namespace CinemaTicketBooking.Controllers
         {
             return _context.TblCinema.Any(e => e.CinemaId == id);
         }
-
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

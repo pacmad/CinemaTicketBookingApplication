@@ -44,7 +44,8 @@ namespace CinemaTicketBooking.Repository
 
         public List<TblCinema> GetAllCinemas()
         {
-            throw new NotImplementedException();
+            var cinemaTicketBookingContext = _context.TblCinema.Include(t => t.AdminUser).Include(t => t.Adress).Include(t => t.CreatedByUser).Include(t => t.LastModifiedByUser).Where(r => r.IsDeleted == false).ToList();
+            return cinemaTicketBookingContext;
         }
 
         public TblCinema GetCinemaById(int id)

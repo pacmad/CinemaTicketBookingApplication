@@ -1,14 +1,13 @@
-﻿@model CinemaTicketBooking.Entities.TblCinema
+﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.CinemaViewModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Cinema Details</h2>
 
 <div>
-    <h4>TblCinema</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -24,12 +23,6 @@
             @Html.DisplayFor(model => model.CinemaDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CinemaProfilePicture)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CinemaProfilePicture)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.CreatedOnDate)
         </dt>
         <dd>
@@ -42,34 +35,16 @@
             @Html.DisplayFor(model => model.LastModifiedOnDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.AdminUser)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.AdminUser.Id)
+            @Html.DisplayFor(model => model.AdminUser.UserName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Adress)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Adress.CreatedByUserId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedByUser)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedByUser.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastModifiedByUser)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastModifiedByUser.Id)
+            @Html.DisplayFor(model => model.Adress.StreetName)
         </dd>
     </dl>
 </div>

@@ -13,41 +13,63 @@ namespace CinemaTicketBooking.Services
     public class CinemaService : ICinemaService
     {
         private readonly ICinemaRepostiory _cinemaRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public CinemaService(ICinemaRepostiory cinemaRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IAddressRepository addressRepository)
         {
             _cinemaRepository = cinemaRepository;
             _userManager = userManager;
+            _addressRepository = addressRepository;
         }
 
         public bool AddCinema(CinemaViewModel cinema)
         {
 
-            TblCinema tblCinema = new TblCinema()
+            TblAddress myAddress = new TblAddress()
             {
-                CinemaId = cinema.CinemaId,
-                AdminUserId = cinema.AdminUserId,
-                CinemaName = cinema.CinemaName,
-                CinemaDescription = cinema.CinemaDescription,
-                AdressId = cinema.AdressId,
+                CityId = cinema.CityId,
+                CountryId = cinema.CountryId,
+                StreetName = cinema.StreetName,
                 CreatedByUserId = cinema.CreatedByUserId,
                 LastModifiedByUserId = cinema.LastModifiedByUserId,
-                CreatedOnDate = cinema.CreatedOnDate,
-                LastModifiedOnDate = cinema.LastModifiedOnDate,
-                AdminUser = cinema.AdminUser,
-                Adress = cinema.Adress,
-                CreatedByUser = cinema.CreatedByUser,
-                LastModifiedByUser = cinema.LastModifiedByUser,
+                CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
+                LastModifiedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
                 IsDeleted = false
             };
 
-            var cinemaAdded = _cinemaRepository.AddCinema(tblCinema);
+            var addressAdded = _addressRepository.AddAddress(myAddress);
 
-            if (cinemaAdded)
+            if (addressAdded)
             {
-                return true;
+                TblCinema tblCinema = new TblCinema()
+                {
+                    CinemaId = cinema.CinemaId,
+                    AdminUserId = cinema.AdminUserId,
+                    CinemaName = cinema.CinemaName,
+                    CinemaDescription = cinema.CinemaDescription,
+                    AdressId = myAddress.AdressId,
+                    CreatedByUserId = cinema.CreatedByUserId,
+                    LastModifiedByUserId = cinema.LastModifiedByUserId,
+                    CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
+                    LastModifiedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
+                    AdminUser = cinema.AdminUser,
+                    Adress = cinema.Adress,
+                    CreatedByUser = cinema.CreatedByUser,
+                    LastModifiedByUser = cinema.LastModifiedByUser,
+                    IsDeleted = false
+                };
+
+                var cinemaAdded = _cinemaRepository.AddCinema(tblCinema);
+
+                if (cinemaAdded)
+                {
+                    return true;
+                }
+
+                return false;
             }
 
             return false;
@@ -66,7 +88,27 @@ namespace CinemaTicketBooking.Services
 
         public IEnumerable<CinemaViewModel> GetAllCinemas()
         {
-            throw new NotImplementedException();
+            var allCinemas = _cinemaRepository.GetAllCinemas();
+
+            var targetList = allCinemas
+              .Select(x => new CinemaViewModel() {
+                  CinemaId = x.CinemaId,
+                  AdminUserId = x.AdminUserId,
+                  CinemaName = x.CinemaName,
+                  CinemaDescription = x.CinemaDescription,
+                  AdressId = x.AdressId,
+                  CreatedByUserId = x.CreatedByUserId,
+                  LastModifiedByUserId = x.LastModifiedByUserId,
+                  CreatedOnDate = x.CreatedOnDate,
+                  LastModifiedOnDate = x.LastModifiedOnDate,
+                  AdminUser = x.AdminUser,
+                  Adress = x.Adress,
+                  CreatedByUser = x.CreatedByUser,
+                  LastModifiedByUser = x.LastModifiedByUser
+              })
+              .ToList();
+
+            return targetList;
         }
 
         public Task<CinemaViewModel> GetCinemaById(int id)

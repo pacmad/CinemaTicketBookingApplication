@@ -40,8 +40,12 @@ namespace CinemaTicketBooking
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddTransient<ICinemaService, CinemaService>();
             services.AddScoped<ICinemaRepostiory, CinemaRepository>();
+
+            //serice i addresses
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             services.AddMvc();
         }

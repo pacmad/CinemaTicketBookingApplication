@@ -1,4 +1,4 @@
-﻿@model CinemaTicketBooking.Entities.TblCinema
+﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.CinemaViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Cinema Admin</label>
-                <select asp-for="AdminUserId" class ="form-control" asp-items="ViewBag.AdminUserId"></select>
+                <select asp-for="AdminUserId" class="form-control" asp-items="ViewBag.AdminUserId"></select>
             </div>
             <div class="form-group">
                 <label class="control-label">Cinema Name</label>
@@ -26,8 +26,17 @@
                 <span asp-validation-for="CinemaDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Address</label>
-                <select asp-for="AdressId" class ="form-control" asp-items="ViewBag.AdressId"></select>
+                <label class="control-label">Country</label>
+                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">City</label>
+                <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Street Name</label>
+                <input asp-for="StreetName" class="form-control" />
+                <span asp-validation-for="StreetName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
