@@ -6,7 +6,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = "Kyqu";
+    ViewData["Title"] = "Log in";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -14,7 +14,7 @@
     <div class="col-md-4 col-md-offset-4">
         <section>
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Përdorni llogarinë tuaj për tu kyqur.</h4>
+                <h4>Use your account information to log in.</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
@@ -40,10 +40,10 @@
                 </div>
                 <div class="form-group">
                     <p>
-                        <a asp-action="ForgotPassword">Keni harruar passwordin?</a>
+                        <a asp-action="ForgotPassword">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Regjistrohu si shfrytëzues i ri?</a>
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
                     </p>
                 </div>
             </form>
