@@ -15,7 +15,6 @@ namespace CinemaTicketBooking.Entities
     : base(options)
         {
         }
-
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -28,6 +27,7 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblCities> TblCities { get; set; }
         public virtual DbSet<TblCountries> TblCountries { get; set; }
         public virtual DbSet<TblCustomerComments> TblCustomerComments { get; set; }
+        public virtual DbSet<TblFeedback> TblFeedback { get; set; }
         public virtual DbSet<TblLanguage> TblLanguage { get; set; }
         public virtual DbSet<TblMovie> TblMovie { get; set; }
         public virtual DbSet<TblMovieGenre> TblMovieGenre { get; set; }
@@ -46,7 +46,7 @@ namespace CinemaTicketBooking.Entities
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 //                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
             }
-        }
+    }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -375,6 +375,29 @@ namespace CinemaTicketBooking.Entities
                     .WithMany(p => p.TblCustomerComments)
                     .HasForeignKey(d => d.MovieId)
                     .HasConstraintName("FK_tbl_CustomerComments_tbl_Movie");
+            });
+
+            modelBuilder.Entity<TblFeedback>(entity =>
+            {
+                entity.HasKey(e => e.FeedbackId);
+
+                entity.ToTable("tbl_Feedback");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Message)
+                    .IsRequired()
+                    .HasMaxLength(1000);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Subject)
+                    .IsRequired()
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<TblLanguage>(entity =>
