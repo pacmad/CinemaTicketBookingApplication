@@ -1,5 +1,10 @@
 ﻿Scaffold-DbContext "Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Force
 
+        public CinemaTicketBookingContext()
+        {
+
+        }
+
         public CinemaTicketBookingContext(DbContextOptions<CinemaTicketBookingContext> options)
     : base(options)
         {

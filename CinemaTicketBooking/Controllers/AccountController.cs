@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using CinemaTicketBooking.Models;
 using CinemaTicketBooking.Models.AccountViewModels;
 using CinemaTicketBooking.Services;
+using CinemaTicketBooking.Entities;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -22,6 +23,7 @@ namespace CinemaTicketBooking.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly CinemaTicketBookingContext _context;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
@@ -29,11 +31,13 @@ namespace CinemaTicketBooking.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            CinemaTicketBookingContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _context = context;
             _logger = logger;
         }
 
@@ -224,6 +228,15 @@ namespace CinemaTicketBooking.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    AspNetUserRoles userRole = new AspNetUserRoles()
+                    {
+                        UserId = user.Id,
+                        RoleId = _context.AspNetRoles.Where(r => r.Name == "SimpleUser").FirstOrDefault().Id
+                    };
+
+                    _context.AspNetUserRoles.Add(userRole);
+                    await _context.SaveChangesAsync();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

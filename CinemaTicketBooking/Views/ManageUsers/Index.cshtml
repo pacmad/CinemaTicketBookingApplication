@@ -5,24 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Manage Users</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a role="button" class="btn btn-success" asp-action="Create">Add new user</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </th>
-            <th></th>
+            <th>
+                Email
+            </th>
+            <th>
+                Phone Number
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Role
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,9 +40,12 @@
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.AspNetUserRoles.Where(r=>r.UserId == item.Id).FirstOrDefault().Role.Name)
+            </td>
+            <td>
+                <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

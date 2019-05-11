@@ -59,6 +59,7 @@ namespace CinemaTicketBooking.Entities
         public string SecurityStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public string UserName { get; set; }
+        public bool IsDeleted { get; set; }
 
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }

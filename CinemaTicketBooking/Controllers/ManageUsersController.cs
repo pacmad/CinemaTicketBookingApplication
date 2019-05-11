@@ -24,7 +24,11 @@ namespace CinemaTicketBooking.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AspNetUsers.ToListAsync());
+            return View(await _context.AspNetUsers
+                .Include(i => i.AspNetUserRoles)
+                .ThenInclude(it => it.Role)
+                .Where(r=>r.IsDeleted == false)
+                .ToListAsync());
         }
 
         // GET: ManageUsers/Details/5
@@ -147,8 +151,10 @@ namespace CinemaTicketBooking.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var aspNetUsers = await _context.AspNetUsers.SingleOrDefaultAsync(m => m.Id == id);
-            _context.AspNetUsers.Remove(aspNetUsers);
-            await _context.SaveChangesAsync();
+            aspNetUsers.IsDeleted = true;
+            _context.AspNetUsers.Update(aspNetUsers);
+            _context.Entry(aspNetUsers).State = EntityState.Modified;
+            var userDeleted = await _context.SaveChangesAsync() > 0;
             return RedirectToAction(nameof(Index));
         }
 

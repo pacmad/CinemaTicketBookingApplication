@@ -15,6 +15,7 @@ namespace CinemaTicketBooking.Entities
     : base(options)
         {
         }
+
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -43,10 +44,10 @@ namespace CinemaTicketBooking.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                //                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
             }
-    }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
