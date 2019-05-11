@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using CinemaTicketBooking.Services;
 using CinemaTicketBooking.Models.SuperAdminViewModels;
+using CinemaTicketBooking.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -32,12 +34,14 @@ namespace CinemaTicketBooking.Controllers
             _cinemaService = cinemaService;
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Index()
         {
             var listOfAllCinemas = _cinemaService.GetAllCinemas();
             return View(listOfAllCinemas.ToList());
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,6 +60,7 @@ namespace CinemaTicketBooking.Controllers
 
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Create()
         {
             ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
@@ -65,6 +70,7 @@ namespace CinemaTicketBooking.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CinemaViewModel model)
@@ -86,12 +92,14 @@ namespace CinemaTicketBooking.Controllers
 
             if (cinemaAdded)
             {
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return View("Index").WithSuccess("Info!", "Cinema was saved successfully!");
             }
 
             return BadRequest();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -116,6 +124,7 @@ namespace CinemaTicketBooking.Controllers
             return View(tblCinema);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CinemaViewModel model)
@@ -142,7 +151,8 @@ namespace CinemaTicketBooking.Controllers
 
                 if (cinemaAdded)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return View("Index").WithSuccess("Info!", "Cinema was edited successfully!");
+                    //return RedirectToAction(nameof(Index));
                 }
 
             }
@@ -154,6 +164,7 @@ namespace CinemaTicketBooking.Controllers
             return BadRequest();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -172,6 +183,7 @@ namespace CinemaTicketBooking.Controllers
 
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -180,7 +192,8 @@ namespace CinemaTicketBooking.Controllers
 
             if (cinemaDeletd)
             {
-                return RedirectToAction(nameof(Index));
+                return View("Index").WithSuccess("Info!", "Cinema was deleted successfully!");
+                //return RedirectToAction(nameof(Index));
             }
             else
             {
@@ -189,6 +202,7 @@ namespace CinemaTicketBooking.Controllers
 
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         private bool TblCinemaExists(int id)
         {
             return _context.TblCinema.Any(e => e.CinemaId == id);

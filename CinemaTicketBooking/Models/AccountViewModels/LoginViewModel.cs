@@ -16,7 +16,7 @@ namespace CinemaTicketBooking.Models.AccountViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Më mbaj mend?")]
+        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 }

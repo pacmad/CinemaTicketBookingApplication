@@ -33,6 +33,20 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("SuperAdmin"))
+                            {
+                                <li>
+                                <a asp-area="" asp-controller="Cinemas" asp-action="Index">Cinemas</a>
+                                </li>
+                                <li>
+                                    <a asp-area="" asp-controller="ManageUsers" asp-action="Index">Manage Users</a>
+                                </li>
+                            }
+                        }
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
