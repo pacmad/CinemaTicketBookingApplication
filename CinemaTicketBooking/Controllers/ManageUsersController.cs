@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketBooking.Entities;
 using Microsoft.AspNetCore.Authorization;
+using CinemaTicketBooking.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -14,21 +16,26 @@ namespace CinemaTicketBooking.Controllers
     public class ManageUsersController : Controller
     {
         private readonly CinemaTicketBookingContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ManageUsersController(CinemaTicketBookingContext context)
+        public ManageUsersController(CinemaTicketBookingContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ManageUsers
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AspNetUsers
+            var listOfUsers = await _context.AspNetUsers
                 .Include(i => i.AspNetUserRoles)
                 .ThenInclude(it => it.Role)
-                .Where(r=>r.IsDeleted == false)
-                .ToListAsync());
+                .Where(r => r.IsDeleted == false)
+                .ToListAsync();
+            listOfUsers.Reverse();
+
+            return View(listOfUsers);
         }
 
         // GET: ManageUsers/Details/5
@@ -63,15 +70,23 @@ namespace CinemaTicketBooking.Controllers
         [HttpPost]
         [Authorize(Roles = "SuperAdmin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] AspNetUsers aspNetUsers)
+        public async Task<IActionResult> Create(AspNetUsers aspNetUsers)
         {
-            if (ModelState.IsValid)
+            var user = new ApplicationUser { UserName = aspNetUsers.UserName, Email = aspNetUsers.Email, PhoneNumber = aspNetUsers.PhoneNumber };
+            var result = await _userManager.CreateAsync(user, "P@ssw0rd");
+            if (result.Succeeded)
             {
-                _context.Add(aspNetUsers);
+                AspNetUserRoles userRole = new AspNetUserRoles()
+                {
+                    UserId = user.Id,
+                    RoleId = _context.AspNetRoles.Where(r => r.Name == "CinemaAdmin").FirstOrDefault().Id
+                };
+
+                _context.AspNetUserRoles.Add(userRole);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
             }
-            return View(aspNetUsers);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ManageUsers/Edit/5
