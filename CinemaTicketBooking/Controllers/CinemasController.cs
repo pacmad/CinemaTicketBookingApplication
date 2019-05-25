@@ -63,7 +63,11 @@ namespace CinemaTicketBooking.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public IActionResult Create()
         {
-            ViewData["AdminUserId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
+            List<string> userids = _context.AspNetUserRoles.Where(a => a.RoleId == "1").Select(b => b.UserId).Distinct().ToList();
+
+            List<AspNetUsers> listUsers = _context.AspNetUsers.Where(a => userids.Any(c => c == a.Id)).ToList();
+
+            ViewData["AdminUserId"] = new SelectList(listUsers, "Id", "UserName");
             ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
             ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
 
