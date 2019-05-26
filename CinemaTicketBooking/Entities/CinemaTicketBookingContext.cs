@@ -23,6 +23,7 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<TblAddress> TblAddress { get; set; }
         public virtual DbSet<TblCinema> TblCinema { get; set; }
         public virtual DbSet<TblCities> TblCities { get; set; }
@@ -39,15 +40,6 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblSeat> TblSeat { get; set; }
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer(@"Server=RINORS-G5;Database=CinemaTicketBooking;Trusted_Connection=True;User Id=sa; Password=P@ssw0rd;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -143,6 +135,22 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserTokens)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<Images>(entity =>
+            {
+                entity.HasKey(e => e.ImageId);
+
+                entity.Property(e => e.ContentType)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Data).IsRequired();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<TblAddress>(entity =>
@@ -261,17 +269,11 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(150);
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
@@ -284,13 +286,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblCitiesCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Cities_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblCitiesLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Cities_AspNetUsers1");
             });
 
@@ -304,30 +304,22 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(150);
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblCountriesCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Countries_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblCountriesLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Countries_AspNetUsers1");
             });
 
@@ -407,34 +399,26 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_Language");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
                 entity.Property(e => e.LanguageName)
                     .IsRequired()
                     .HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblLanguageCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Language_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblLanguageLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Language_AspNetUsers1");
             });
 
@@ -500,6 +484,11 @@ namespace CinemaTicketBooking.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Movie_AspNetUsers");
 
+                entity.HasOne(d => d.ImageNavigation)
+                    .WithMany(p => p.TblMovie)
+                    .HasForeignKey(d => d.Image)
+                    .HasConstraintName("FK_tbl_Movie_Images");
+
                 entity.HasOne(d => d.Language)
                     .WithMany(p => p.TblMovie)
                     .HasForeignKey(d => d.LanguageId)
@@ -524,21 +513,15 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_MovieGenre");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
                 entity.Property(e => e.GenreDescription)
                     .IsRequired()
                     .HasMaxLength(500);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
@@ -549,13 +532,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblMovieGenreCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_MovieGenre_AspNetUsers2");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblMovieGenreLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_MovieGenre_AspNetUsers3");
             });
 

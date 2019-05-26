@@ -26,6 +26,7 @@ namespace CinemaTicketBooking.Entities
         public string ShowTimeIds { get; set; }
         public string Rating { get; set; }
         public int LanguageId { get; set; }
+        public int? Image { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string CreatedOnDate { get; set; }
@@ -34,6 +35,7 @@ namespace CinemaTicketBooking.Entities
 
         public TblCinema Cinema { get; set; }
         public AspNetUsers CreatedByUser { get; set; }
+        public Images ImageNavigation { get; set; }
         public TblLanguage Language { get; set; }
         public AspNetUsers LastModifiedByUser { get; set; }
         public TblMovieGenre MovieGenre { get; set; }

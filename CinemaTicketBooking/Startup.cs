@@ -13,6 +13,7 @@ using CinemaTicketBooking.Models;
 using CinemaTicketBooking.Services;
 using CinemaTicketBooking.Entities;
 using CinemaTicketBooking.Repository;
+using CinemaTicketBooking.Extensions;
 
 namespace CinemaTicketBooking
 {
@@ -46,6 +47,9 @@ namespace CinemaTicketBooking
 
             //serice i addresses
             services.AddScoped<IAddressRepository, AddressRepository>();
+
+            services.AddTransient<IImageHandler, ImageHandler>();
+            services.AddTransient<IImageWriter,ImageWriter>();
 
             services.AddMvc();
         }
