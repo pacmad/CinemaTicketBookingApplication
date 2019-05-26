@@ -11,12 +11,7 @@ namespace CinemaTicketBooking.Entities
         }
 
         public int ImageId { get; set; }
-        public byte[] Name { get; set; }
-        public byte[] Data { get; set; }
-        public int Length { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public string ContentType { get; set; }
+        public string ImagePath { get; set; }
 
         public ICollection<TblMovie> TblMovie { get; set; }
     }

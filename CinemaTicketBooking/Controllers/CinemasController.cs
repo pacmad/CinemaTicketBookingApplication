@@ -97,7 +97,8 @@ namespace CinemaTicketBooking.Controllers
             if (cinemaAdded)
             {
                 //return RedirectToAction(nameof(Index));
-                return View("Index").WithSuccess("Info!", "Cinema was saved successfully!");
+                //return View("Index").WithSuccess("Info!", "Cinema was saved successfully!");
+                return RedirectToAction(nameof(Index));
             }
 
             return BadRequest();

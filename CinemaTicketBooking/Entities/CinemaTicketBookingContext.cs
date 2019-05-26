@@ -41,6 +41,7 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
@@ -141,16 +142,7 @@ namespace CinemaTicketBooking.Entities
             {
                 entity.HasKey(e => e.ImageId);
 
-                entity.Property(e => e.ContentType)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Data).IsRequired();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.ImagePath).IsRequired();
             });
 
             modelBuilder.Entity<TblAddress>(entity =>
@@ -159,19 +151,17 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_Address");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.StreetName).HasMaxLength(500);
 
@@ -190,13 +180,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblAddressCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Address_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblAddressLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Address_AspNetUsers1");
             });
 
@@ -220,19 +208,17 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.CinemaProfilePicture).HasMaxLength(2500);
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.AdminUser)
                     .WithMany(p => p.TblCinemaAdminUser)
@@ -249,13 +235,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblCinemaCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Cinema_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblCinemaLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Cinema_AspNetUsers1");
             });
 
@@ -271,11 +255,15 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.TblCities)
@@ -306,11 +294,15 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblCountriesCreatedByUser)
@@ -401,7 +393,9 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LanguageName)
                     .IsRequired()
@@ -409,7 +403,9 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblLanguageCreatedByUser)
@@ -428,19 +424,17 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_Movie");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.MovieDescription)
                     .IsRequired()
@@ -481,7 +475,6 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblMovieCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Movie_AspNetUsers");
 
                 entity.HasOne(d => d.ImageNavigation)
@@ -498,7 +491,6 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblMovieLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Movie_AspNetUsers1");
 
                 entity.HasOne(d => d.MovieGenre)
@@ -515,7 +507,9 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.GenreDescription)
                     .IsRequired()
@@ -523,7 +517,9 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.MovieGenreName)
                     .IsRequired()
@@ -547,18 +543,16 @@ namespace CinemaTicketBooking.Entities
                 entity.ToTable("tbl_PaymentType");
 
                 entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(450)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.PaymentTypeName)
                     .IsRequired()
@@ -567,13 +561,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblPaymentTypeCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_PaymentType_AspNetUsers2");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblPaymentTypeLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_PaymentType_AspNetUsers3");
             });
 
@@ -584,16 +576,12 @@ namespace CinemaTicketBooking.Entities
                 entity.ToTable("tbl_Promotion");
 
                 entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(450)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
@@ -614,13 +602,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblPromotionCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Promotion_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblPromotionLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Promotion_AspNetUsers1");
             });
 
@@ -631,16 +617,12 @@ namespace CinemaTicketBooking.Entities
                 entity.ToTable("tbl_Reservations");
 
                 entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(450)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
@@ -651,13 +633,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblReservationsCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Reservations_AspNetUsers3");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblReservationsLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Reservations_AspNetUsers4");
 
                 entity.HasOne(d => d.PaymentType)
@@ -706,18 +686,16 @@ namespace CinemaTicketBooking.Entities
                 entity.Property(e => e.ReservationStatusId).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(450)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ReservationStatusName)
                     .IsRequired()
@@ -726,13 +704,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblReservationStatusCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_ReservationStatus_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblReservationStatusLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_ReservationStatus_AspNetUsers1");
             });
 
@@ -743,16 +719,12 @@ namespace CinemaTicketBooking.Entities
                 entity.ToTable("tbl_Seat");
 
                 entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(450)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
@@ -773,19 +745,17 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_ShowTime");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Time)
                     .IsRequired()
@@ -800,13 +770,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblShowTimeCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_ShowTime_AspNetUsers");
 
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblShowTimeLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_ShowTime_AspNetUsers1");
 
                 entity.HasOne(d => d.Movie)
@@ -822,23 +790,21 @@ namespace CinemaTicketBooking.Entities
 
                 entity.ToTable("tbl_Ticket");
 
-                entity.Property(e => e.CreatedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.CreatedByUserId).HasMaxLength(450);
 
                 entity.Property(e => e.CreatedOnDate)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.CustomerId)
                     .IsRequired()
                     .HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedByUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
 
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
+                entity.Property(e => e.LastModifiedOnDate)
+                    .HasMaxLength(150)
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Price)
                     .IsRequired()
@@ -857,7 +823,6 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblTicketCreatedByUser)
                     .HasForeignKey(d => d.CreatedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Ticket_AspNetUsers1");
 
                 entity.HasOne(d => d.Customer)
@@ -869,7 +834,6 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.LastModifiedByUser)
                     .WithMany(p => p.TblTicketLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Ticket_AspNetUsers2");
 
                 entity.HasOne(d => d.Movie)
