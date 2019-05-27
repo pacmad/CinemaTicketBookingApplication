@@ -96,9 +96,8 @@ namespace CinemaTicketBooking.Controllers
 
             if (cinemaAdded)
             {
-                //return RedirectToAction(nameof(Index));
-                //return View("Index").WithSuccess("Info!", "Cinema was saved successfully!");
-                return RedirectToAction(nameof(Index));
+                var listOfAllCinemas = _cinemaService.GetAllCinemas();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Cinema was created successfully!");
             }
 
             return BadRequest();
@@ -156,8 +155,8 @@ namespace CinemaTicketBooking.Controllers
 
                 if (cinemaAdded)
                 {
-                    return View("Index").WithSuccess("Info!", "Cinema was edited successfully!");
-                    //return RedirectToAction(nameof(Index));
+                    var listOfAllCinemas = _cinemaService.GetAllCinemas();
+                    return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Cinema was edited successfully!");
                 }
 
             }
@@ -197,8 +196,8 @@ namespace CinemaTicketBooking.Controllers
 
             if (cinemaDeletd)
             {
-                return View("Index").WithSuccess("Info!", "Cinema was deleted successfully!");
-                //return RedirectToAction(nameof(Index));
+                var listOfAllCinemas = _cinemaService.GetAllCinemas();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Cinema was deleted successfully!");
             }
             else
             {

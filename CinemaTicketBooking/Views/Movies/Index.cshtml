@@ -1,0 +1,138 @@
+﻿@model IEnumerable<CinemaTicketBooking.Entities.TblMovie>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsBookable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MovieName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MovieDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReleaseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MovieLength)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PriceForAdults)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PriceForChildrens)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShowTimeIds)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedOnDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastModifiedOnDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cinema)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedByUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModifiedByUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovieGenre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsBookable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovieName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovieDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovieLength)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceForAdults)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceForChildrens)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShowTimeIds)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedOnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cinema.AdminUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedByUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageNavigation.ImagePath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Language.LanguageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedByUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovieGenre.GenreDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MovieId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

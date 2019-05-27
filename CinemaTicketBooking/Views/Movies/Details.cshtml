@@ -1,0 +1,127 @@
+﻿@model CinemaTicketBooking.Entities.TblMovie
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TblMovie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IsBookable)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsBookable)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MovieName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovieName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MovieDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovieDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MovieLength)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovieLength)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PriceForAdults)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PriceForAdults)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PriceForChildrens)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PriceForChildrens)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShowTimeIds)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShowTimeIds)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOnDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedOnDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedOnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cinema)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cinema.AdminUserId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedByUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByUser.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageNavigation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageNavigation.ImagePath)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Language)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Language.LanguageName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedByUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedByUser.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MovieGenre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovieGenre.GenreDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MovieId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

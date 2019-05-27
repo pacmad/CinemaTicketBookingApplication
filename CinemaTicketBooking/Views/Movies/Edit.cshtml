@@ -1,0 +1,124 @@
+﻿@model CinemaTicketBooking.Entities.TblMovie
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>TblMovie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MovieId" />
+            <div class="form-group">
+                <label asp-for="CinemaId" class="control-label"></label>
+                <select asp-for="CinemaId" class="form-control" asp-items="ViewBag.CinemaId"></select>
+                <span asp-validation-for="CinemaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieGenreId" class="control-label"></label>
+                <select asp-for="MovieGenreId" class="form-control" asp-items="ViewBag.MovieGenreId"></select>
+                <span asp-validation-for="MovieGenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsBookable" /> @Html.DisplayNameFor(model => model.IsBookable)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieName" class="control-label"></label>
+                <input asp-for="MovieName" class="form-control" />
+                <span asp-validation-for="MovieName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieDescription" class="control-label"></label>
+                <input asp-for="MovieDescription" class="form-control" />
+                <span asp-validation-for="MovieDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieLength" class="control-label"></label>
+                <input asp-for="MovieLength" class="form-control" />
+                <span asp-validation-for="MovieLength" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceForAdults" class="control-label"></label>
+                <input asp-for="PriceForAdults" class="form-control" />
+                <span asp-validation-for="PriceForAdults" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceForChildrens" class="control-label"></label>
+                <input asp-for="PriceForChildrens" class="form-control" />
+                <span asp-validation-for="PriceForChildrens" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShowTimeIds" class="control-label"></label>
+                <input asp-for="ShowTimeIds" class="form-control" />
+                <span asp-validation-for="ShowTimeIds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+                <span asp-validation-for="LanguageId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <select asp-for="Image" class="form-control" asp-items="ViewBag.Image"></select>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedByUserId" class="control-label"></label>
+                <select asp-for="CreatedByUserId" class="form-control" asp-items="ViewBag.CreatedByUserId"></select>
+                <span asp-validation-for="CreatedByUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastModifiedByUserId" class="control-label"></label>
+                <select asp-for="LastModifiedByUserId" class="form-control" asp-items="ViewBag.LastModifiedByUserId"></select>
+                <span asp-validation-for="LastModifiedByUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOnDate" class="control-label"></label>
+                <input asp-for="CreatedOnDate" class="form-control" />
+                <span asp-validation-for="CreatedOnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastModifiedOnDate" class="control-label"></label>
+                <input asp-for="LastModifiedOnDate" class="form-control" />
+                <span asp-validation-for="LastModifiedOnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

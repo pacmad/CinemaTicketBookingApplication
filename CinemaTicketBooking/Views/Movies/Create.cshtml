@@ -1,0 +1,82 @@
+﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.MovieViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add new movie</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MovieGenreId" class="control-label"></label>
+                <select asp-for="MovieGenreId" class="form-control" asp-items="ViewBag.MovieGenreId"></select>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsBookable" /> @Html.DisplayNameFor(model => model.IsBookable)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieName" class="control-label"></label>
+                <input asp-for="MovieName" class="form-control" />
+                <span asp-validation-for="MovieName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieDescription" class="control-label"></label>
+                <input asp-for="MovieDescription" class="form-control" />
+                <span asp-validation-for="MovieDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieLength" class="control-label"></label>
+                <input asp-for="MovieLength" class="form-control" />
+                <span asp-validation-for="MovieLength" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceForAdults" class="control-label"></label>
+                <input asp-for="PriceForAdults" class="form-control" />
+                <span asp-validation-for="PriceForAdults" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceForChildrens" class="control-label"></label>
+                <input asp-for="PriceForChildrens" class="form-control" />
+                <span asp-validation-for="PriceForChildrens" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShowTimeIds" class="control-label"></label>
+                <input asp-for="ShowTimeIds" class="form-control" />
+                <span asp-validation-for="ShowTimeIds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <select asp-for="Image" class="form-control" asp-items="ViewBag.Image"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
