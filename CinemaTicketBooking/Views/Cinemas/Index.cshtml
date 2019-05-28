@@ -5,63 +5,85 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
 <h2>Manage Cinemas</h2>
 
 <p>
     <a role="button" class="btn btn-success" asp-action="Create">Add new cinema</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Cinema Name
-            </th>
-            <th>
-                Cinema Description
-            </th>
-            <th>
-                Created on date
-            </th>
-            <th>
-                Cinema Admin
-            </th>
-            <th>
-                Address
-            </th>
-            <th>
-                Created by user
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="container">
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td class="col-md-1">
-                    @Html.DisplayFor(modelItem => item.CinemaName)
-                </td>
-                <td class="col-md-1">
-                    @Html.DisplayFor(modelItem => item.CinemaDescription)
-                </td>
-                <td class="col-md-1">
-                    @Html.DisplayFor(modelItem => item.CreatedOnDate)
-                </td>
-                <td class="col-md-1">
-                    @Html.DisplayFor(modelItem => item.AdminUser.UserName)
-                </td>
-                <td class="col-md-2">
-                    @Html.DisplayFor(modelItem => item.Adress.StreetName)
-                </td>
-                <td class="col-md-1">
-                    @Html.DisplayFor(modelItem => item.CreatedByUser.UserName)
-                </td>
-                <td>
-                    <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a> 
-                    <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.CinemaId">Details</a>
-                    <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
-                </td>
+                <th>
+                    Cinema Name
+                </th>
+                <th>
+                    Cinema Description
+                </th>
+                <th>
+                    Created on date
+                </th>
+                <th>
+                    Cinema Admin
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Created by user
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody id="myTable">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="col-md-1">
+                        @Html.DisplayFor(modelItem => item.CinemaName)
+                    </td>
+                    <td class="col-md-3">
+                        @Html.DisplayFor(modelItem => item.CinemaDescription)
+                    </td>
+                    <td class="col-md-1">
+                        @Html.DisplayFor(modelItem => item.CreatedOnDate)
+                    </td>
+                    <td class="col-md-1">
+                        @Html.DisplayFor(modelItem => item.AdminUser.UserName)
+                    </td>
+                    <td class="col-md-2">
+                        @Html.DisplayFor(modelItem => item.Adress.StreetName)
+                    </td>
+                    <td class="col-md-1">
+                        @Html.DisplayFor(modelItem => item.CreatedByUser.UserName)
+                    </td>
+                    <td>
+                        <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a>
+                        <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.CinemaId">Details</a>
+                        <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

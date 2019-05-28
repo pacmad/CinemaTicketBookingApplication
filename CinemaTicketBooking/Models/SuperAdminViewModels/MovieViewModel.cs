@@ -1,4 +1,5 @@
 ﻿using CinemaTicketBooking.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,11 +12,14 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
     {
         public int MovieId { get; set; }
         public int CinemaId { get; set; }
+
+        [Required]
+        [Display(Name = "Movie Genre")]
         public int? MovieGenreId { get; set; }
 
 
         [Required]
-        [Display(Name = "Is Bookable?")]
+        [Display(Name = "Is Bookable")]
         public bool IsBookable { get; set; }
 
         [Required]
@@ -45,7 +49,7 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         public string PriceForChildrens { get; set; }
 
         [Required]
-        public string ShowTimeIds { get; set; }
+        public string ShowTime { get; set; }
 
         public string Rating { get; set; }
 
@@ -53,7 +57,10 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         public int LanguageId { get; set; }
 
         [Required]
-        public int? Image { get; set; }
+        public IFormFile Image { get; set; }
+
+        [Required]
+        public string ImagePath { get; set; }
 
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }

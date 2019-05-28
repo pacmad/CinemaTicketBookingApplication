@@ -15,45 +15,59 @@ namespace CinemaTicketBooking.Services
         private readonly IMovieRepository _movieRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly CinemaTicketBookingContext _context;
 
         public MovieService(IMovieRepository movieRepository,
             UserManager<ApplicationUser> userManager,
-            IAddressRepository addressRepository)
+            IAddressRepository addressRepository,
+            CinemaTicketBookingContext context)
         {
             _movieRepository = movieRepository;
             _userManager = userManager;
             _addressRepository = addressRepository;
+            _context = context;
         }
 
         public bool AddMovie(MovieViewModel movie)
         {
-            TblMovie tblMovie = new TblMovie()
+            Images image = new Images()
             {
-                CinemaId = movie.CinemaId,
-                MovieGenreId = movie.MovieGenreId,
-                IsBookable = movie.IsBookable,
-                MovieName = movie.MovieName,
-                MovieDescription = movie.MovieDescription,
-                ReleaseDate = movie.ReleaseDate,
-                MovieLength = movie.MovieLength,
-                PriceForAdults = movie.PriceForAdults,
-                PriceForChildrens = movie.PriceForChildrens,
-                ShowTimeIds = movie.ShowTimeIds,
-                Rating = movie.Rating,
-                LanguageId = movie.LanguageId,
-                Image = movie.Image,
-                CreatedByUserId = movie.CreatedByUserId,
-                LastModifiedByUserId = movie.LastModifiedByUserId,
-                CreatedOnDate = movie.CreatedOnDate,
-                LastModifiedOnDate = movie.LastModifiedOnDate,
-                IsDeleted = movie.IsDeleted
+                ImagePath = movie.ImagePath
             };
 
-            var cinemaAdded = _movieRepository.AddMovie(tblMovie);
+            _context.Add(image);
 
-            if (cinemaAdded)
+            if (_context.SaveChanges() > 0)
             {
-                return true;
+
+                TblMovie tblMovie = new TblMovie()
+                {
+                    CinemaId = movie.CinemaId,
+                    MovieGenreId = movie.MovieGenreId,
+                    IsBookable = movie.IsBookable,
+                    MovieName = movie.MovieName,
+                    MovieDescription = movie.MovieDescription,
+                    ReleaseDate = movie.ReleaseDate,
+                    MovieLength = movie.MovieLength,
+                    PriceForAdults = movie.PriceForAdults,
+                    PriceForChildrens = movie.PriceForChildrens,
+                    //ShowTimeIds = movie.ShowTimeIds,
+                    Rating = movie.Rating,
+                    LanguageId = movie.LanguageId,
+                    Image = image.ImageId,
+                    CreatedByUserId = movie.CreatedByUserId,
+                    LastModifiedByUserId = movie.LastModifiedByUserId,
+                    CreatedOnDate = movie.CreatedOnDate,
+                    LastModifiedOnDate = movie.LastModifiedOnDate,
+                    IsDeleted = movie.IsDeleted
+                };
+
+                var cinemaAdded = _movieRepository.AddMovie(tblMovie);
+
+                if (cinemaAdded)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -98,10 +112,10 @@ namespace CinemaTicketBooking.Services
                   MovieLength = x.MovieLength,
                   PriceForAdults = x.PriceForAdults,
                   PriceForChildrens = x.PriceForChildrens,
-                  ShowTimeIds = x.ShowTimeIds,
+                  //ShowTimeIds = x.ShowTimeIds,
                   Rating = x.Rating,
                   LanguageId = x.LanguageId,
-                  Image = x.Image,
+                  //Image = x.Image,
                   CreatedByUserId = x.CreatedByUserId,
                   LastModifiedByUserId = x.LastModifiedByUserId,
                   CreatedOnDate = x.CreatedOnDate,
@@ -139,10 +153,10 @@ namespace CinemaTicketBooking.Services
                 MovieLength = movie.MovieLength,
                 PriceForAdults = movie.PriceForAdults,
                 PriceForChildrens = movie.PriceForChildrens,
-                ShowTimeIds = movie.ShowTimeIds,
+                //ShowTimeIds = movie.ShowTimeIds,
                 Rating = movie.Rating,
                 LanguageId = movie.LanguageId,
-                Image = movie.Image,
+                //Image = movie.Image,
                 CreatedByUserId = movie.CreatedByUserId,
                 LastModifiedByUserId = movie.LastModifiedByUserId,
                 CreatedOnDate = movie.CreatedOnDate,

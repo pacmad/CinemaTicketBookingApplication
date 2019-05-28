@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using CinemaTicketBooking.Models.SuperAdminViewModels;
+using CinemaTicketBooking.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -21,20 +23,26 @@ namespace CinemaTicketBooking.Controllers
         private readonly CinemaTicketBookingContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
+        private readonly IImageHandler _imageHandler;
 
         public MoviesController(CinemaTicketBookingContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<AccountController> logger,
-            IMovieService movieService)
+            IMovieService movieService,
+            IImageHandler imageHandler)
         {
             _userManager = userManager;
             _context = context;
             _logger = logger;
             _movieService = movieService;
+            _imageHandler = imageHandler;
         }
 
-        [Authorize(Roles = "SuperAdmin")]
-        [Authorize(Roles = "CinemaAdmin")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            return await _imageHandler.UploadImage(file);
+        }
+
         public IActionResult Index()
         {
             var listOfAllMovies = _movieService.GetAllMovies();
@@ -60,10 +68,14 @@ namespace CinemaTicketBooking.Controllers
 
         public IActionResult Create()
         {
+            var showTimes = _context.TblShowTime.ToList();
+
             ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "AdminUserId");
-            ViewData["Image"] = new SelectList(_context.Images, "ImageId", "ImagePath");
             ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
             ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription");
+            ViewData["ShowTimes"] = showTimes;
+
+
             return View();
         }
 
@@ -87,18 +99,20 @@ namespace CinemaTicketBooking.Controllers
                 return BadRequest();
             }
 
-            var cinemaAdded = _movieService.AddMovie(model);
+            var result = await UploadImage(model.Image);
+            model.ImagePath = result.ToString();
 
+            var cinemaAdded = _movieService.AddMovie(model);
 
             if (cinemaAdded)
             {
-                return RedirectToAction(nameof(Index));
+                var listOfAllCinemas = _movieService.GetAllMovies();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was added successfully!");
             }
 
             return BadRequest();
         }
 
-        // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -120,48 +134,45 @@ namespace CinemaTicketBooking.Controllers
             return View(tblMovie);
         }
 
-        // POST: Movies/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MovieId,CinemaId,MovieGenreId,IsBookable,MovieName,MovieDescription,ReleaseDate,MovieLength,PriceForAdults,PriceForChildrens,ShowTimeIds,Rating,LanguageId,Image,CreatedByUserId,LastModifiedByUserId,CreatedOnDate,LastModifiedOnDate,IsDeleted")] TblMovie tblMovie)
+        public async Task<IActionResult> Edit(int id, MovieViewModel model)
         {
-            if (id != tblMovie.MovieId)
+            if (id != model.MovieId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+                string mail = user?.Email;
+
+                model.LastModifiedByUserId = userId;
+
+                if (!ModelState.IsValid)
                 {
-                    _context.Update(tblMovie);
-                    await _context.SaveChangesAsync();
+                    return BadRequest();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                var movieEdited = _movieService.EditMovie(model);
+
+                if (movieEdited)
                 {
-                    if (!TblMovieExists(tblMovie.MovieId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    var listOfAllCinemas = _movieService.GetAllMovies();
+                    return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was edited successfully!");
                 }
-                return RedirectToAction(nameof(Index));
+
             }
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "AdminUserId", tblMovie.CinemaId);
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblMovie.CreatedByUserId);
-            ViewData["Image"] = new SelectList(_context.Images, "ImageId", "ImagePath", tblMovie.Image);
-            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName", tblMovie.LanguageId);
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblMovie.LastModifiedByUserId);
-            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription", tblMovie.MovieGenreId);
-            return View(tblMovie);
+            else
+            {
+                return View(model);
+            }
+
+            return BadRequest();
         }
 
-        // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,31 +180,31 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var tblMovie = await _context.TblMovie
-                .Include(t => t.Cinema)
-                .Include(t => t.CreatedByUser)
-                .Include(t => t.ImageNavigation)
-                .Include(t => t.Language)
-                .Include(t => t.LastModifiedByUser)
-                .Include(t => t.MovieGenre)
-                .SingleOrDefaultAsync(m => m.MovieId == id);
-            if (tblMovie == null)
+            var mymovie = await _movieService.GetMovieById(id ?? 1);
+
+            if (mymovie == null)
             {
                 return NotFound();
             }
 
-            return View(tblMovie);
+            return View(mymovie);
         }
 
-        // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblMovie = await _context.TblMovie.SingleOrDefaultAsync(m => m.MovieId == id);
-            _context.TblMovie.Remove(tblMovie);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var movieDeleted = await _movieService.DeleteMovie(id);
+
+            if (movieDeleted)
+            {
+                var listOfAllCinemas = _movieService.GetAllMovies();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was deleted successfully!");
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool TblMovieExists(int id)
