@@ -49,6 +49,7 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         public string PriceForChildrens { get; set; }
 
         [Required]
+        [Display(Name = "Show Time")]
         public string ShowTime { get; set; }
 
         public string Rating { get; set; }

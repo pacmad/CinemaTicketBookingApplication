@@ -35,7 +35,7 @@ namespace CinemaTicketBooking.Services
                 ImagePath = movie.ImagePath
             };
 
-            _context.Add(image);
+            _context.Images.Add(image);
 
             if (_context.SaveChanges() > 0)
             {
@@ -66,6 +66,25 @@ namespace CinemaTicketBooking.Services
 
                 if (cinemaAdded)
                 {
+                    TblShowTime showTime = new TblShowTime()
+                    {
+                        CinemaId = movie.CinemaId,
+                        MovieId = tblMovie.MovieId,
+                        Time = movie.ShowTime,
+                        CreatedByUserId = movie.CreatedByUserId,
+                        LastModifiedByUserId = movie.LastModifiedByUserId,
+                        CreatedOnDate = DateTime.Now.ToShortDateString(),
+                        LastModifiedOnDate = DateTime.Now.ToShortDateString(),
+                    };
+
+                    _context.TblShowTime.Add(showTime);
+
+                    if (_context.SaveChanges() > 0)
+                    {
+                        var myMovie = _context.TblMovie.Where(r => r.MovieId == tblMovie.MovieId).SingleOrDefault();
+                        myMovie.ShowTimeIds = showTime.ShowTimeId.ToString();
+                        _movieRepository.EditMovie(myMovie);
+                    }
                     return true;
                 }
             }

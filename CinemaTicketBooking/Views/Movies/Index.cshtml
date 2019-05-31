@@ -57,34 +57,34 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.MovieName)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.MovieDescription)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.ReleaseDate)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.MovieLength)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.PriceForAdults)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.PriceForChildrens)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.Cinema.CinemaName)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.Language.LanguageName)
                     </td>
-                    <td>
+                    <td class="col-md-offset-1">
                         @Html.DisplayFor(modelItem => item.MovieGenre.MovieGenreName)
                     </td>
-                    <td>
+                    <td class="col-md-2">
                         <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.MovieId">Edit</a>
                         <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.MovieId">Details</a>
                         <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>

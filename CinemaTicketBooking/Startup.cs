@@ -14,6 +14,8 @@ using CinemaTicketBooking.Services;
 using CinemaTicketBooking.Entities;
 using CinemaTicketBooking.Repository;
 using CinemaTicketBooking.Extensions;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CinemaTicketBooking
 {
@@ -39,6 +41,10 @@ namespace CinemaTicketBooking
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddSingleton<IFileProvider>(
+            new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ICinemaService, CinemaService>();
@@ -46,7 +52,6 @@ namespace CinemaTicketBooking
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddTransient<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
-
             services.AddTransient<IImageHandler, ImageHandler>();
             services.AddTransient<IImageWriter,ImageWriter>();
 

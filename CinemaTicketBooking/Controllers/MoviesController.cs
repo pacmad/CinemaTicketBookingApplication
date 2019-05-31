@@ -88,19 +88,17 @@ namespace CinemaTicketBooking.Controllers
             var userId = user?.Id;
             string mail = user?.Email;
 
-            var cinema = await _context.TblCinema.Where(r => r.AdminUserId == userId).SingleOrDefaultAsync();
+            var cinema = _context.TblCinema.Where(r => r.AdminUserId == userId).FirstOrDefault();
 
             model.CreatedByUserId = userId;
             model.LastModifiedByUserId = userId;
             model.CinemaId = cinema.CinemaId;
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var result = await UploadImage(model.Image);
-            model.ImagePath = result.ToString();
+            var test = result as ObjectResult;
+
+            model.ImagePath = test.Value.ToString();
+
 
             var cinemaAdded = _movieService.AddMovie(model);
 
