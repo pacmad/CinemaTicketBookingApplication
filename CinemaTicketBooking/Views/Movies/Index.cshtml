@@ -20,34 +20,28 @@
 </p>
 <div class="container">
     <input class="form-control" id="myInput" type="text" placeholder="Search..">
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped table-nonfluid table-hover">
         <thead>
             <tr>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.MovieName)
                 </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.MovieDescription)
                 </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.ReleaseDate)
                 </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.MovieLength)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PriceForAdults)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PriceForChildrens)
-                </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.Cinema)
                 </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.Language)
                 </th>
-                <th>
+                <th class="col-lg-2">
                     @Html.DisplayNameFor(model => model.MovieGenre)
                 </th>
                 <th></th>
@@ -57,31 +51,25 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.MovieName)
                     </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.MovieDescription)
                     </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.ReleaseDate)
                     </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.MovieLength)
                     </td>
-                    <td class="col-md-offset-1">
-                        @Html.DisplayFor(modelItem => item.PriceForAdults)
-                    </td>
-                    <td class="col-md-offset-1">
-                        @Html.DisplayFor(modelItem => item.PriceForChildrens)
-                    </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.Cinema.CinemaName)
                     </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.Language.LanguageName)
                     </td>
-                    <td class="col-md-offset-1">
+                    <td>
                         @Html.DisplayFor(modelItem => item.MovieGenre.MovieGenreName)
                     </td>
                     <td class="col-md-2">
