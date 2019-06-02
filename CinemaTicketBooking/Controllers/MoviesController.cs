@@ -118,18 +118,17 @@ namespace CinemaTicketBooking.Controllers
                 return NotFound();
             }
 
-            var tblMovie = await _context.TblMovie.SingleOrDefaultAsync(m => m.MovieId == id);
-            if (tblMovie == null)
+            var movie = await _movieService.GetMovieById(id ?? 1);
+
+            if (movie == null)
             {
                 return NotFound();
             }
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "AdminUserId", tblMovie.CinemaId);
-            ViewData["CreatedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblMovie.CreatedByUserId);
-            ViewData["Image"] = new SelectList(_context.Images, "ImageId", "ImagePath", tblMovie.Image);
-            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName", tblMovie.LanguageId);
-            ViewData["LastModifiedByUserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", tblMovie.LastModifiedByUserId);
-            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription", tblMovie.MovieGenreId);
-            return View(tblMovie);
+
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "CinemaName", movie.CinemaId);
+            ViewData["Image"] = new SelectList(_context.Images, "ImageId", "ImagePath", movie.Image);
+            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName", movie.LanguageId);
+            return View(movie);
         }
 
         [HttpPost]
@@ -140,35 +139,23 @@ namespace CinemaTicketBooking.Controllers
             {
                 return NotFound();
             }
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+            string mail = user?.Email;
 
-            if (ModelState.IsValid)
+            model.LastModifiedByUserId = userId;
+
+            var movieEdited = _movieService.EditMovie(model);
+
+            if (movieEdited)
             {
-                var user = await GetCurrentUserAsync();
-                var userId = user?.Id;
-                string mail = user?.Email;
-
-                model.LastModifiedByUserId = userId;
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
-                var movieEdited = _movieService.EditMovie(model);
-
-                if (movieEdited)
-                {
-                    var listOfAllCinemas = _movieService.GetAllMovies();
-                    return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was edited successfully!");
-                }
-
+                var listOfAllCinemas = _movieService.GetAllMovies();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was edited successfully!");
             }
             else
             {
                 return View(model);
             }
-
-            return BadRequest();
         }
 
         public async Task<IActionResult> Delete(int? id)

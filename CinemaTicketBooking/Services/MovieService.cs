@@ -101,6 +101,7 @@ namespace CinemaTicketBooking.Services
         public bool EditMovie(MovieViewModel movie)
         {
             var movieToEdit = _movieRepository.GetMovieById(movie.MovieId);
+            movieToEdit.CinemaId = movie.CinemaId;
             movieToEdit.MovieName = movie.MovieName;
             movieToEdit.MovieDescription = movie.MovieDescription;
             movieToEdit.IsBookable = movie.IsBookable;
@@ -172,10 +173,9 @@ namespace CinemaTicketBooking.Services
                 MovieLength = movie.MovieLength,
                 PriceForAdults = movie.PriceForAdults,
                 PriceForChildrens = movie.PriceForChildrens,
-                //ShowTimeIds = movie.ShowTimeIds,
+                ShowTime = movie.ShowTimeIds,
                 Rating = movie.Rating,
                 LanguageId = movie.LanguageId,
-                //Image = movie.Image,
                 CreatedByUserId = movie.CreatedByUserId,
                 LastModifiedByUserId = movie.LastModifiedByUserId,
                 CreatedOnDate = movie.CreatedOnDate,

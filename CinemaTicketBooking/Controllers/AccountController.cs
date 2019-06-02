@@ -67,31 +67,43 @@ namespace CinemaTicketBooking.Controllers
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 try
                 {
-                    var user = _context.AspNetUsers.Where(u => u.Email.Equals(model.Email)).Single(); // where db is ApplicationDbContext instance
-                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    var user = _context.AspNetUsers.Where(u => u.Email.Equals(model.Email)).FirstOrDefault();
 
-                    if (result.Succeeded)
+                    if (user != null)
                     {
-                        _logger.LogInformation("User logged in.");
-                        return RedirectToLocal(returnUrl);
-                    }
-                    if (result.RequiresTwoFactor)
-                    {
-                        return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                    }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToAction(nameof(Lockout));
+
+                        // where db is ApplicationDbContext instance
+                        var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        if (result.RequiresTwoFactor)
+                        {
+                            return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+                        }
+                        if (result.IsLockedOut)
+                        {
+                            _logger.LogWarning("User account locked out.");
+                            return RedirectToAction(nameof(Lockout));
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return View(model);
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError(string.Empty, "There is not user with this email.");
                         return View(model);
                     }
                 }
-                catch (InvalidOperationException)
+                catch (Exception ex)
                 {
+                    string error = ex.Message;
                     // the user is not exist
                 }
             }
