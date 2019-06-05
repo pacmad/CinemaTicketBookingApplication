@@ -61,5 +61,17 @@ namespace CinemaTicketBooking.Repository
 
             return tblCinema;
         }
+
+        public TblCinema GetCinemaByAdminId(string id)
+        {
+            var tblCinema = _context.TblCinema
+                .Include(t => t.AdminUser)
+                .Include(t => t.Adress)
+                .Include(t => t.CreatedByUser)
+                .Include(t => t.LastModifiedByUser)
+                .Where(r => r.IsDeleted == false && r.AdminUserId == id).LastOrDefault();
+
+            return tblCinema;
+        }
     }
 }

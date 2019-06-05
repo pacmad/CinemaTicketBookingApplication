@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketBooking.Entities;
-using CinemaTicketBooking.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using CinemaTicketBooking.Services;
+using CinemaTicketBooking.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using CinemaTicketBooking.Models.SuperAdminViewModels;
 using CinemaTicketBooking.Extensions;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -22,16 +23,24 @@ namespace CinemaTicketBooking.Controllers
         private readonly CinemaTicketBookingContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
+        private readonly IImageHandler _imageHandler;
 
         public CinemasController(CinemaTicketBookingContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<AccountController> logger,
-            ICinemaService cinemaService)
+            ICinemaService cinemaService,
+            IImageHandler imageHandler)
         {
             _userManager = userManager;
             _context = context;
             _logger = logger;
             _cinemaService = cinemaService;
+            _imageHandler = imageHandler;
+        }
+
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            return await _imageHandler.UploadImage(file);
         }
 
         [Authorize(Roles = "SuperAdmin")]
@@ -86,10 +95,10 @@ namespace CinemaTicketBooking.Controllers
             model.CreatedByUserId = userId;
             model.LastModifiedByUserId = userId;
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            var result = await UploadImage(model.Image);
+            var test = result as ObjectResult;
+
+            model.ImagePath = test.Value.ToString();
 
             var cinemaAdded = _cinemaService.AddCinema(model);
 

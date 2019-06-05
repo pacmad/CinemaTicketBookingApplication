@@ -1,4 +1,5 @@
 ﻿using CinemaTicketBooking.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -43,6 +44,12 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
 
         [Display(Name = "Admin user")]
         public AspNetUsers AdminUser { get; set; }
+
+        [Required]
+        public IFormFile Image { get; set; }
+
+        [Required]
+        public string ImagePath { get; set; }
 
         public TblAddress Adress { get; set; }
         public AspNetUsers CreatedByUser { get; set; }

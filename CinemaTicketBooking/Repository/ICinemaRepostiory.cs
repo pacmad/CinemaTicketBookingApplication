@@ -10,6 +10,7 @@ namespace CinemaTicketBooking.Repository
     public interface ICinemaRepostiory
     {
         TblCinema GetCinemaById(int id);
+        TblCinema GetCinemaByAdminId(string id);
         List<TblCinema> GetAllCinemas();
         bool AddCinema(TblCinema cinema);
         bool EditCinema(TblCinema cinema);

@@ -15,14 +15,17 @@ namespace CinemaTicketBooking.Services
         private readonly ICinemaRepostiory _cinemaRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly CinemaTicketBookingContext _context;
 
         public CinemaService(ICinemaRepostiory cinemaRepository,
             UserManager<ApplicationUser> userManager,
-            IAddressRepository addressRepository)
+            IAddressRepository addressRepository,
+            CinemaTicketBookingContext context)
         {
             _cinemaRepository = cinemaRepository;
             _userManager = userManager;
             _addressRepository = addressRepository;
+            _context = context;
         }
 
         public bool AddCinema(CinemaViewModel cinema)
@@ -44,6 +47,13 @@ namespace CinemaTicketBooking.Services
 
             if (addressAdded)
             {
+                Images image = new Images()
+                {
+                    ImagePath = cinema.ImagePath
+                };
+
+                _context.Images.Add(image);
+
                 TblCinema tblCinema = new TblCinema()
                 {
                     CinemaId = cinema.CinemaId,
@@ -51,6 +61,7 @@ namespace CinemaTicketBooking.Services
                     CinemaName = cinema.CinemaName,
                     CinemaDescription = cinema.CinemaDescription,
                     AdressId = myAddress.AdressId,
+                    CinemaProfilePicture = cinema.ImagePath,
                     CreatedByUserId = cinema.CreatedByUserId,
                     LastModifiedByUserId = cinema.LastModifiedByUserId,
                     CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
@@ -121,6 +132,31 @@ namespace CinemaTicketBooking.Services
         public Task<CinemaViewModel> GetCinemaById(int id)
         {
             var cinema = _cinemaRepository.GetCinemaById(id);
+
+            CinemaViewModel myCinema = new CinemaViewModel()
+            {
+                CinemaId = cinema.CinemaId,
+                AdminUserId = cinema.AdminUserId,
+                CinemaName = cinema.CinemaName,
+                CinemaDescription = cinema.CinemaDescription,
+                AdressId = cinema.AdressId,
+                CreatedByUserId = cinema.CreatedByUserId,
+                LastModifiedByUserId = cinema.LastModifiedByUserId,
+                CreatedOnDate = cinema.CreatedOnDate,
+                LastModifiedOnDate = cinema.LastModifiedOnDate,
+                AdminUser = cinema.AdminUser,
+                Adress = cinema.Adress,
+                CreatedByUser = cinema.CreatedByUser,
+                LastModifiedByUser = cinema.LastModifiedByUser,
+                IsDeleted = false
+            };
+            return Task.Run(() => myCinema);
+
+        }
+
+        public Task<CinemaViewModel> GetCinemaByAdminId(string id)
+        {
+            var cinema = _cinemaRepository.GetCinemaByAdminId(id);
 
             CinemaViewModel myCinema = new CinemaViewModel()
             {

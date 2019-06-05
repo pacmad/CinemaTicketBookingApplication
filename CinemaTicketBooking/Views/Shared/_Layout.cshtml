@@ -47,6 +47,11 @@
                                 <li>
                                     <a asp-area="" asp-controller="ManageUsers" asp-action="Index">Manage Users</a>
                                 </li>
+                            }else if (User.IsInRole("CinemaAdmin"))
+                            {
+                                <li>
+                                    <a asp-area="" asp-controller="MyCinema" asp-action="Index">My Cinema</a>
+                                </li>
                             }
                         }
                     }
