@@ -7,20 +7,35 @@ using Microsoft.AspNetCore.Mvc;
 using CinemaTicketBooking.Models;
 using CinemaTicketBooking.Entities;
 using CinemaTicketBooking.Extensions;
+using CinemaTicketBooking.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CinemaTicketBooking.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IMovieService _movieService;
         private readonly CinemaTicketBookingContext _context;
 
-        public HomeController(CinemaTicketBookingContext context)
+        public HomeController(CinemaTicketBookingContext context, IMovieService movieService)
         {
             _context = context;
+            _movieService = movieService;
         }
 
         public IActionResult Index()
         {
+
+            var listOfAllMovies = _movieService.GetAllMovies();
+            ViewData["ListOfMovies"] = listOfAllMovies;
+
+
+            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
+            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
+            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
+            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "MovieGenreName");
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "CinemaName");
+
             return View();
         }
 

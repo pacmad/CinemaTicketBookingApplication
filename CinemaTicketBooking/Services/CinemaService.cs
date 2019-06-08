@@ -61,7 +61,7 @@ namespace CinemaTicketBooking.Services
                     CinemaName = cinema.CinemaName,
                     CinemaDescription = cinema.CinemaDescription,
                     AdressId = myAddress.AdressId,
-                    CinemaProfilePicture = cinema.ImagePath,
+                    CinemaProfilePicture = image.ImagePath,
                     CreatedByUserId = cinema.CreatedByUserId,
                     LastModifiedByUserId = cinema.LastModifiedByUserId,
                     CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
@@ -172,6 +172,7 @@ namespace CinemaTicketBooking.Services
                 AdminUser = cinema.AdminUser,
                 Adress = cinema.Adress,
                 CreatedByUser = cinema.CreatedByUser,
+                CinemaProfilePicture = cinema.CinemaProfilePicture,
                 LastModifiedByUser = cinema.LastModifiedByUser,
                 IsDeleted = false
             };

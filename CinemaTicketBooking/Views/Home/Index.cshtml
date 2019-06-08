@@ -68,45 +68,48 @@
     </a>
 </div>
 
+<div class="container">
+    <div class="well" style="margin-top:10px;">
+        <div class="row">
+            <div class="col-sm-2" style="margin-top:20px">
+                <label for="sel1">Category:</label>
+                <select class="form-control" asp-items="ViewBag.MovieGenreId"></select>
+            </div>
+            <div class="col-sm-2" style="margin-top:20px">
+                <label for="sel1">Country:</label>
+                <select class="form-control" asp-items="ViewBag.CountryId"></select>
+            </div>
+            <div class="col-sm-2" style="margin-top:20px">
+                <label for="sel1">City:</label>
+                <select class="form-control" asp-items="ViewBag.CityId"></select>
+            </div>
+            <div class="col-sm-2" style="margin-top:20px">
+                <label for="sel1">Language:</label>
+                <select class="form-control" asp-items="ViewBag.LanguageId"></select>
+            </div>
+            <div class="col-sm-2" style="margin-top:20px">
+                <label for="sel1">Cinema:</label>
+                <select class="form-control" asp-items="ViewBag.CinemaId"></select>
+            </div>
+            <div class="col-sm-2" style="margin-top:40px">
+                <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="2">Filter Movies</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row" style="padding: 15px;">
-    <div class="col-sm-6 col-md-3">
-        <div class="thumbnail">
-            <img src="~/images/avengers.png" alt="Avengers poster" class="img-responsive">
-            <div class="caption">
-                <h3>Avengers: Endgame</h3>
-                <p>Adrift in space with no food or water, Tony Stark sends a message to Pepper Potts as his oxygen supply starts to dwindle.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Book now</a></p>
+    @foreach (var item in ViewBag.ListOfMovies)
+    {
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail" width="220" height="242">
+                <img width="220" height="242" src="@Url.Content("~/images/"+item.ImageNavigation.ImagePath)" class="img-responsive">
+                <div class="caption">
+                    <h3>@item.MovieName</h3>
+                    <p>@item.MovieDescription</p>
+                    <p><a class="btn btn-primary" role="button">Book now</a></p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="thumbnail">
-            <img src="~/images/capitain.jpg" alt="Avengers poster" class="img-responsive">
-            <div class="caption">
-                <h3>Captain Marvel</h3>
-                <p>Captain Marvel is an extraterrestrial Kree warrior who finds herself caught in the middle of an intergalactic battle between her people and the Skrulls.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Book now</a></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="thumbnail">
-            <img src="~/images/wick.jpg" alt="Avengers poster" class="img-responsive">
-            <div class="caption">
-                <h3>John Wick: Chapter 3</h3>
-                <p>Legendary hit man John Wick must fight his way out of New York when a $14 million contract on his life makes him the target of the world's top assassins.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Book now</a></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="thumbnail">
-            <img src="~/images/incredibles.jpg" alt="Avengers poster" class="img-responsive">
-            <div class="caption">
-                <h3>Incredibles 2</h3>
-                <p>Everyone’s favorite family of superheroes is back in “Incredibles 2” – but this time Helen is in the spotlight, leaving Bob at home with Violet and Dash to navigate the day-to-day heroics of “normal” life.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Book now</a></p>
-            </div>
-        </div>
-    </div>
+    }
 </div>
