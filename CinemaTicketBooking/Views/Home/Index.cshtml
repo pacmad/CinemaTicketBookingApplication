@@ -73,26 +73,36 @@
         <div class="row">
             <div class="col-sm-2" style="margin-top:20px">
                 <label for="sel1">Category:</label>
-                <select class="form-control" asp-items="ViewBag.MovieGenreId"></select>
+                <select id="MovieGenre" class="form-control" asp-items="ViewBag.MovieGenreId">
+                    <option disabled selected>Select Category</option>
+                </select>
             </div>
             <div class="col-sm-2" style="margin-top:20px">
                 <label for="sel1">Country:</label>
-                <select class="form-control" asp-items="ViewBag.CountryId"></select>
+                <select id="Country" class="form-control" asp-items="ViewBag.CountryId">
+                    <option disabled selected>Select Country</option>
+                </select>
             </div>
             <div class="col-sm-2" style="margin-top:20px">
                 <label for="sel1">City:</label>
-                <select class="form-control" asp-items="ViewBag.CityId"></select>
+                <select id="City" class="form-control" asp-items="ViewBag.CityId">
+                    <option disabled selected>Select City</option>
+                </select>
             </div>
             <div class="col-sm-2" style="margin-top:20px">
                 <label for="sel1">Language:</label>
-                <select class="form-control" asp-items="ViewBag.LanguageId"></select>
+                <select id="Language" class="form-control" asp-items="ViewBag.LanguageId">
+                    <option disabled selected>Select Language</option>
+                </select>
             </div>
             <div class="col-sm-2" style="margin-top:20px">
                 <label for="sel1">Cinema:</label>
-                <select class="form-control" asp-items="ViewBag.CinemaId"></select>
+                <select id="Cinema" class="form-control" asp-items="ViewBag.CinemaId">
+                    <option disabled selected>Select Cinema</option>
+                </select>
             </div>
             <div class="col-sm-2" style="margin-top:40px">
-                <a role="button" class="btn btn-primary" asp-action="Details" asp-route-id="2">Filter Movies</a>
+                <button class="btn btn-primary" onclick="myFunction()">Filter Movies</button>
             </div>
         </div>
     </div>
@@ -101,7 +111,7 @@
 <div class="row" style="padding: 15px;">
     @foreach (var item in ViewBag.ListOfMovies)
     {
-        <div class="col-sm-6 col-md-3">
+        <div class="col-sm-6 col-md-3" id="@item.MovieId">
             <div class="thumbnail" width="220" height="242">
                 <img width="220" height="242" src="@Url.Content("~/images/"+item.ImageNavigation.ImagePath)" class="img-responsive">
                 <div class="caption">
@@ -113,3 +123,29 @@
         </div>
     }
 </div>
+
+<script>
+    function myFunction() {
+
+        var moviegenre = document.getElementById("MovieGenre");
+        var genre = moviegenre.options[moviegenre.selectedIndex].value;
+
+        var chosencinema = document.getElementById("Cinema");
+        var cinema = chosencinema.options[chosencinema.selectedIndex].value;
+
+        var chosencity = document.getElementById("City");
+        var city = chosencity.options[chosencity.selectedIndex].value;
+
+        var chosenlang = document.getElementById("Language");
+        var lang = chosenlang.options[chosenlang.selectedIndex].value;
+
+        var chosencountry = document.getElementById("Country");
+        var country = chosencountry.options[chosencountry.selectedIndex].value;
+
+
+
+        alert(genre + " , " + cinema + " , " + city + " , " + lang + " , " + country);
+
+
+    }
+</script>

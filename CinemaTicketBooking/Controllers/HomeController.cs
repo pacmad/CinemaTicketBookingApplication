@@ -9,6 +9,7 @@ using CinemaTicketBooking.Entities;
 using CinemaTicketBooking.Extensions;
 using CinemaTicketBooking.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CinemaTicketBooking.Models.SuperAdminViewModels;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -26,6 +27,21 @@ namespace CinemaTicketBooking.Controllers
         public IActionResult Index()
         {
 
+            var listOfAllMovies = _movieService.GetAllMovies();
+            ViewData["ListOfMovies"] = listOfAllMovies;
+
+
+            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
+            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
+            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
+            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "MovieGenreName");
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "CinemaName");
+
+            return View();
+        }
+
+        public IActionResult FilterMovies(MoviesFilterViewModel model)
+        {
             var listOfAllMovies = _movieService.GetAllMovies();
             ViewData["ListOfMovies"] = listOfAllMovies;
 
