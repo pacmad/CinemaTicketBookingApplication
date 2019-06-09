@@ -20,7 +20,7 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
 
         [Required]
         [Display(Name = "Cinema Description")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 20)]
+        [StringLength(2500, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 20)]
         public string CinemaDescription { get; set; }
 
         [Display(Name = "Cinema Profile Picture")]

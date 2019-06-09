@@ -9,6 +9,7 @@ namespace CinemaTicketBooking.Repository
     public interface IMovieRepository
     {
         TblMovie GetMovieById(int id);
+        List<TblMovie> GetMoviesByCinemaId(int id);
         List<TblMovie> GetAllMovies();
         bool AddMovie(TblMovie movie);
         bool EditMovie(TblMovie movie);

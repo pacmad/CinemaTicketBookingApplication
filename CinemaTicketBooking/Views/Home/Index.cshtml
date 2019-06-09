@@ -142,10 +142,20 @@
         var chosencountry = document.getElementById("Country");
         var country = chosencountry.options[chosencountry.selectedIndex].value;
 
+        var myArray = { moviegenre: genre, chosencinema: cinema, chosenlang: lang, chosencountry: country, chosencity: city };
+        var filterParameters = new Array;
 
+        for (var key in myArray) {
+            if (myArray[key] != "Select Category"
+                && myArray[key] != "Select Country"
+                && myArray[key] != "Select City"
+                && myArray[key] != "Select Language"
+                && myArray[key] != "Select Cinema") {
+                var object = { filterParameter: key, value: myArray[key]};
+                filterParameters.push(object);
+                console.log(object);
 
-        alert(genre + " , " + cinema + " , " + city + " , " + lang + " , " + country);
-
-
+            }
+        }
     }
 </script>

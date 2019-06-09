@@ -31,11 +31,11 @@ namespace CinemaTicketBooking.Controllers
             ViewData["ListOfMovies"] = listOfAllMovies;
 
 
-            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
-            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
-            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
-            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "MovieGenreName");
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "CinemaName");
+            ViewData["CityId"] = new SelectList(_context.TblCities.Where(f => f.IsDeleted == false), "CityId", "CityName");
+            ViewData["CountryId"] = new SelectList(_context.TblCountries.Where(f => f.IsDeleted == false), "CountryId", "CountryName");
+            ViewData["LanguageId"] = new SelectList(_context.TblLanguage.Where(f => f.IsDeleted == false), "LanguageId", "LanguageName");
+            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre.Where(f => f.IsDeleted == false), "MovieGenreId", "MovieGenreName");
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema.Where(f=>f.IsDeleted == false), "CinemaId", "CinemaName");
 
             return View();
         }

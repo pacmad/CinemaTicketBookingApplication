@@ -78,5 +78,24 @@ namespace CinemaTicketBooking.Repository
 
             return tblMobie;
         }
+
+        public List<TblMovie> GetMoviesByCinemaId(int id)
+        {
+            var tblMobie = _context.TblMovie
+               .Include(t => t.Cinema)
+               .Include(t => t.CreatedByUser)
+               .Include(t => t.ImageNavigation)
+               .Include(t => t.Language)
+               .Include(t => t.LastModifiedByUser)
+               .Include(t => t.MovieGenre)
+               .Include(t => t.TblCustomerComments)
+               .Include(t => t.TblReservations)
+               .Include(t => t.TblShowTime)
+               .Include(t => t.TblTicket)
+               .Where(r => r.IsDeleted == false && r.CinemaId == id)
+               .ToList();
+
+            return tblMobie;
+        }
     }
 }

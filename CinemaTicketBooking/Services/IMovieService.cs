@@ -9,6 +9,7 @@ namespace CinemaTicketBooking.Services
     public interface IMovieService
     {
         Task<MovieViewModel> GetMovieById(int id);
+        IEnumerable<MovieViewModel> GetMoviesByCinemaId(int id);
         IEnumerable<MovieViewModel> GetAllMovies();
         bool AddMovie(MovieViewModel movie);
         bool EditMovie(MovieViewModel movie);

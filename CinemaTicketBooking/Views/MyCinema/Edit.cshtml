@@ -1,0 +1,52 @@
+﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.CinemaViewModel
+
+@{
+    ViewData["Title"] = "Edit Cinema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Cinema Details</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditMyCinema">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CinemaId" />
+            <div class="form-group">
+                <label asp-for="CinemaName" class="control-label"></label>
+                <input asp-for="CinemaName" class="form-control" />
+                <span asp-validation-for="CinemaName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CinemaDescription" class="control-label"></label>
+                <input asp-for="CinemaDescription" class="form-control" />
+                <span asp-validation-for="CinemaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Country</label>
+                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId" disabled></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">City</label>
+                <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId" disabled></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetName" class="control-label"></label>
+                <input asp-for="StreetName" class="form-control" disabled />
+                @*<span asp-validation-for="StreetName" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a role="button" class="btn btn-primary" asp-action="Index">Back to cinema profile</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
