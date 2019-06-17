@@ -11,6 +11,9 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
     public class MovieViewModel
     {
         public int MovieId { get; set; }
+
+        [Required]
+        [Display(Name = "Cinema")]
         public int CinemaId { get; set; }
 
         [Required]
