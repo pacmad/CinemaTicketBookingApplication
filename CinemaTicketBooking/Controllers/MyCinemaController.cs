@@ -7,6 +7,7 @@ using CinemaTicketBooking.Extensions;
 using CinemaTicketBooking.Models;
 using CinemaTicketBooking.Models.SuperAdminViewModels;
 using CinemaTicketBooking.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,11 +22,13 @@ namespace CinemaTicketBooking.Controllers
         private readonly CinemaTicketBookingContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
+        private readonly IImageHandler _imageHandler;
 
         public MyCinemaController(CinemaTicketBookingContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<AccountController> logger,
             ICinemaService cinemaService,
+            IImageHandler imageHandler,
             IMovieService movieService)
         {
             _userManager = userManager;
@@ -33,6 +36,7 @@ namespace CinemaTicketBooking.Controllers
             _logger = logger;
             _cinemaService = cinemaService;
             _movieService = movieService;
+            _imageHandler = imageHandler;
         }
 
         public async Task<IActionResult> Index()
@@ -101,6 +105,56 @@ namespace CinemaTicketBooking.Controllers
                 ViewData["ListOfMovies"] = listOfAllMovies;
 
                 return View("Index", tblCinema);
+            }
+
+            return BadRequest();
+        }
+
+        public IActionResult Add()
+        {
+            var showTimes = _context.TblShowTime.ToList();
+
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "AdminUserId");
+            ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
+            ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription");
+            ViewData["ShowTimes"] = showTimes;
+
+
+            return View();
+        }
+
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            return await _imageHandler.UploadImage(file);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(MovieViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+            string mail = user?.Email;
+
+            var cinema = _context.TblCinema.Where(r => r.AdminUserId == userId).FirstOrDefault();
+
+            model.CreatedByUserId = userId;
+            model.LastModifiedByUserId = userId;
+            model.CinemaId = cinema.CinemaId;
+
+            var result = await UploadImage(model.Image);
+            var test = result as ObjectResult;
+
+            model.ImagePath = test.Value.ToString();
+
+
+            var cinemaAdded = _movieService.AddMovie(model);
+
+            if (cinemaAdded)
+            {
+                var listOfAllCinemas = _movieService.GetAllMovies();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was added successfully!");
             }
 
             return BadRequest();

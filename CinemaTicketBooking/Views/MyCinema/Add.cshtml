@@ -23,10 +23,6 @@
         <form asp-action="Create" id="CreateMovieForm" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CinemaId" class="control-label"></label>
-                <select asp-for="CinemaId" class="form-control" asp-items="ViewBag.CinemaId"></select>
-            </div>
-            <div class="form-group">
                 <label asp-for="MovieGenreId" class="control-label"></label>
                 <select asp-for="MovieGenreId" class="form-control" asp-items="ViewBag.MovieGenreId"></select>
             </div>
