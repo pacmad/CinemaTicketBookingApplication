@@ -41,7 +41,6 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
@@ -462,9 +461,7 @@ namespace CinemaTicketBooking.Entities
                     .IsRequired()
                     .HasMaxLength(150);
 
-                entity.Property(e => e.ShowTimeIds)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.ShowTimeIds).HasMaxLength(250);
 
                 entity.HasOne(d => d.Cinema)
                     .WithMany(p => p.TblMovie)
