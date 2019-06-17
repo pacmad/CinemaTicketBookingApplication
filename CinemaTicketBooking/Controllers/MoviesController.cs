@@ -70,7 +70,7 @@ namespace CinemaTicketBooking.Controllers
         {
             var showTimes = _context.TblShowTime.ToList();
 
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema.Where(r=>r.IsDeleted==false), "CinemaId", "CinemaName");
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema.Where(r=>r.IsDeleted == false), "CinemaId", "CinemaName");
             ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
             ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription");
             ViewData["ShowTimes"] = showTimes;
@@ -85,10 +85,14 @@ namespace CinemaTicketBooking.Controllers
         public async Task<IActionResult> Create(MovieViewModel model)
         {
             var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
             string mail = user?.Email;
 
-            model.CreatedByUserId = user.Id;
-            model.LastModifiedByUserId = user.Id;
+            //var cinema = _context.TblCinema.Where(r => r.AdminUserId == userId).FirstOrDefault();
+
+            model.CreatedByUserId = userId;
+            model.LastModifiedByUserId = userId;
+            //model.CinemaId = cinema.CinemaId;
 
             var result = await UploadImage(model.Image);
             var test = result as ObjectResult;
