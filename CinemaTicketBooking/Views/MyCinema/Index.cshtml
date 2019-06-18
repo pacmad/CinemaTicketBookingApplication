@@ -23,7 +23,7 @@
             <div class="col-lg-4">
                 <h1>@Html.DisplayFor(model => model.CinemaName)</h1>
                 <p>@Html.DisplayFor(model => model.CinemaDescription)</p>
-                <a role="button" class="btn-block btn btn-success" asp-action="Add" asp-route-id="@Model.CinemaId">Add new movie</a>
+                <a role="button" class="btn-block btn btn-success" asp-action="Add">Add new movie</a>
                 <a role="button" class="btn-block btn btn-warning" asp-action="Edit" asp-route-id="@Model.CinemaId">Edit cinema details</a>
             </div>
         </div>

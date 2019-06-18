@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<CinemaTicketBooking.Models.SuperAdminViewModels.MovieViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <head>
@@ -109,7 +111,7 @@
 </div>
 
 <div class="row" style="padding: 15px;">
-    @foreach (var item in ViewBag.ListOfMovies)
+    @foreach (var item in Model)
     {
         <div class="col-sm-6 col-md-3" id="@item.MovieId">
             <div class="thumbnail" width="220" height="242">
@@ -142,20 +144,23 @@
         var chosencountry = document.getElementById("Country");
         var country = chosencountry.options[chosencountry.selectedIndex].value;
 
-        var myArray = { moviegenre: genre, chosencinema: cinema, chosenlang: lang, chosencountry: country, chosencity: city };
-        var filterParameters = new Array;
+        if ((genre != null || genre != "")
+            || (cinema != null || cinema != "")
+            || (city != null || city != "")
+            || (lang != null || lang != "")
+            || (country != null || country != "")) {
 
-        for (var key in myArray) {
-            if (myArray[key] != "Select Category"
-                && myArray[key] != "Select Country"
-                && myArray[key] != "Select City"
-                && myArray[key] != "Select Language"
-                && myArray[key] != "Select Cinema") {
-                var object = { filterParameter: key, value: myArray[key]};
-                filterParameters.push(object);
-                console.log(object);
+            var model = { CountryId: country, CityId: city, MovieGenreId: genre, CinemaId: cinema, LanguageId: lang };
 
-            }
+            $.ajax({
+                url: 'Home/FilterMovies',
+                data: model
+            }).done(function () {
+                alert('Added');
+            });
+        }
+        else {
+            alert("Ske zgjedh asni filtrim");
         }
     }
 </script>

@@ -157,6 +157,49 @@ namespace CinemaTicketBooking.Services
             return targetList;
         }
 
+        public IEnumerable<MovieViewModel> GetFilteredMovies(MoviesFilterViewModel model)
+        {
+            var allMovies = _movieRepository.GetFilteredMovies(model);
+
+            var targetList = allMovies
+              .Select(x => new MovieViewModel()
+              {
+
+                  MovieId = x.MovieId,
+                  CinemaId = x.CinemaId,
+                  MovieGenreId = x.MovieGenreId,
+                  IsBookable = x.IsBookable,
+                  MovieName = x.MovieName,
+                  MovieDescription = x.MovieDescription,
+                  ReleaseDate = x.ReleaseDate,
+                  MovieLength = x.MovieLength,
+                  PriceForAdults = x.PriceForAdults,
+                  PriceForChildrens = x.PriceForChildrens,
+                  //ShowTimeIds = x.ShowTimeIds,
+                  Rating = x.Rating,
+                  LanguageId = x.LanguageId,
+                  //Image = x.Image,
+                  CreatedByUserId = x.CreatedByUserId,
+                  LastModifiedByUserId = x.LastModifiedByUserId,
+                  CreatedOnDate = x.CreatedOnDate,
+                  LastModifiedOnDate = x.LastModifiedOnDate,
+                  IsDeleted = x.IsDeleted,
+                  Cinema = x.Cinema,
+                  CreatedByUser = x.CreatedByUser,
+                  ImageNavigation = x.ImageNavigation,
+                  Language = x.Language,
+                  LastModifiedByUser = x.LastModifiedByUser,
+                  MovieGenre = x.MovieGenre,
+                  TblCustomerComments = x.TblCustomerComments,
+                  TblReservations = x.TblReservations,
+                  TblShowTime = x.TblShowTime,
+                  TblTicket = x.TblTicket,
+              })
+              .ToList();
+
+            return targetList;
+        }
+
         public IEnumerable<MovieViewModel> GetMoviesByCinemaId(int id)
         {
             var movie = _movieRepository.GetMoviesByCinemaId(id);

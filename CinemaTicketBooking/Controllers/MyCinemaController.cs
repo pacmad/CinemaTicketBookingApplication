@@ -114,7 +114,6 @@ namespace CinemaTicketBooking.Controllers
         {
             var showTimes = _context.TblShowTime.ToList();
 
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema, "CinemaId", "AdminUserId");
             ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
             ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription");
             ViewData["ShowTimes"] = showTimes;
@@ -153,8 +152,17 @@ namespace CinemaTicketBooking.Controllers
 
             if (cinemaAdded)
             {
-                var listOfAllCinemas = _movieService.GetAllMovies();
-                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was added successfully!");
+                var tblCinema = await _cinemaService.GetCinemaByAdminId(userId);
+
+                if (tblCinema == null)
+                {
+                    return NotFound();
+                }
+
+                var listOfAllMovies = _movieService.GetMoviesByCinemaId(tblCinema.CinemaId);
+                ViewData["ListOfMovies"] = listOfAllMovies;
+
+                return View("Index", tblCinema);
             }
 
             return BadRequest();

@@ -11,6 +11,7 @@ namespace CinemaTicketBooking.Services
         Task<MovieViewModel> GetMovieById(int id);
         IEnumerable<MovieViewModel> GetMoviesByCinemaId(int id);
         IEnumerable<MovieViewModel> GetAllMovies();
+        IEnumerable<MovieViewModel> GetFilteredMovies(MoviesFilterViewModel model);
         bool AddMovie(MovieViewModel movie);
         bool EditMovie(MovieViewModel movie);
         Task<bool> DeleteMovie(int id);

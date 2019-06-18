@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CinemaTicketBooking.Entities;
 using CinemaTicketBooking.Models;
+using CinemaTicketBooking.Models.SuperAdminViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,23 +59,65 @@ namespace CinemaTicketBooking.Repository
                 .Include(t => t.TblTicket)
                 .Where(r => r.IsDeleted == false).ToList();
             return cinemaTicketBookingContext;
-    }
+        }
 
-        public TblMovie GetMovieById(int id)
+        public List<TblMovie> GetFilteredMovies(MoviesFilterViewModel model)
         {
-             var tblMobie = _context.TblMovie
-                .Include(t => t.Cinema)
+            var result = _context.TblMovie.Include(t => t.Cinema)
                 .Include(t => t.CreatedByUser)
                 .Include(t => t.ImageNavigation)
                 .Include(t => t.Language)
                 .Include(t => t.LastModifiedByUser)
+                .Include(t => t.Cinema)
+                .ThenInclude(t => t.Adress)
                 .Include(t => t.MovieGenre)
                 .Include(t => t.TblCustomerComments)
                 .Include(t => t.TblReservations)
                 .Include(t => t.TblShowTime)
                 .Include(t => t.TblTicket)
-                .Where(r => r.IsDeleted == false && r.MovieId == id)
-                .SingleOrDefault();
+                .Where(r => r.IsDeleted == false).AsQueryable();
+
+            if (model != null)
+            {
+                if (model.MovieGenreId.HasValue)
+                {
+                    result = result.Where(x => x.MovieGenreId == model.MovieGenreId);
+                }
+                if (model.CountryId.HasValue)
+                {
+                    result = result.Where(x => x.Cinema.Adress.CountryId == model.CountryId);
+                }
+                if (model.CityId.HasValue)
+                {
+                    result = result.Where(x => x.Cinema.Adress.CityId == model.CityId);
+                }
+                if (model.CinemaId.HasValue)
+                {
+                    result = result.Where(x => x.CinemaId == model.CinemaId);
+                }
+                if (model.LanguageId.HasValue)
+                {
+                    result = result.Where(x => x.LanguageId == model.LanguageId);
+                }
+            }
+            return result.ToList();
+        }
+
+        public TblMovie GetMovieById(int id)
+        {
+            var tblMobie = _context.TblMovie
+               .Include(t => t.Cinema)
+               .Include(t => t.CreatedByUser)
+               .Include(t => t.ImageNavigation)
+               .Include(t => t.Language)
+               .Include(t => t.LastModifiedByUser)
+               .Include(t => t.MovieGenre)
+               .Include(t => t.TblCustomerComments)
+               .Include(t => t.TblReservations)
+               .Include(t => t.TblShowTime)
+               .Include(t => t.TblTicket)
+               .Where(r => r.IsDeleted == false && r.MovieId == id)
+               .SingleOrDefault();
 
             return tblMobie;
         }
