@@ -5,90 +5,44 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Movie Details</h2>
-
-<div class="container">
-    <div class="jumbotron">
-        <div class="form-inline">
-            <div class="form-group">
-                <img src="@Url.Content("~/images/"+Model.ImageNavigation.ImagePath)" width="300" height="300" class="img-rounded" />
+<div class="container-fluid" style="margin: 20px;">
+    <div class="row">
+        <div class="col-md-5">
+            <img alt="Bootstrap Image Preview" class="img-rounded" src="@Url.Content("~/images/"+Model.ImageNavigation.ImagePath)" style="width: 90%; /* You can set the dimensions to whatever you want */
+    height: 90%;
+    object-fit: cover;" />
+        </div>
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h1 class="text-center font-weight-bold">
+                        @Html.DisplayFor(model => model.MovieName)
+                    </h1>
+                </div>
             </div>
-            <div class="form-group">
-                <div class="form-horizontal">
-                    <ul style="list-style-type: none;">
-                        <li>
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.MovieName)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.MovieName)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.MovieDescription)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.MovieDescription)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.ReleaseDate)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.ReleaseDate)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.MovieLength)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.MovieLength)
-                                </dd>
-                                <dt>
-                                    Price for adults
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PriceForAdults)
-                                </dd>
-                                <dt>
-                                    Price for childrens
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PriceForChildrens)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Cinema)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Cinema.CinemaName)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Language)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Language.LanguageName)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.MovieGenre)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.MovieGenre.MovieGenreName)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.IsBookable)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.IsBookable)
-                                </dd>
-                            </dl>
-                            <button type="button" class="btn-block btn btn-success">Book now</button>
-                        </li>
-                    </ul>              
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="well">
+                        <div class="row" style="padding: 20px;">
+                            <div class="col-md-7">
+                                <label>Cinema: @Html.DisplayFor(model => model.Cinema.CinemaName)</label>
+                                <label>Movie genre: @Html.DisplayFor(model => model.MovieGenre.MovieGenreName)</label>
+                                <label>Release date: @Html.DisplayFor(model => model.ReleaseDate)</label>
+                                <label>Movie length: @Html.DisplayFor(model => model.MovieLength) mins</label>
+                                <label>Language: @ViewBag.ShowTime</label>
+                                <label>Address: @Html.DisplayFor(model => model.Cinema.Adress.Country.CountryName) , @Html.DisplayFor(model => model.Cinema.Adress.City.CityName), @Html.DisplayFor(model => model.Cinema.Adress.StreetName)</label>
+                            </div>
+                        </div>
+                        <p class="text-left">
+                            @Html.DisplayFor(model => model.MovieDescription)
+                        </p>
+                        <div>
+                            <a role="button" class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.MovieId">Edit</a>
+                            <a role="button" class="btn btn-block btn-primary" asp-action="Index">Back to List</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div>
-    <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.MovieId">Edit</a>
-    <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>

@@ -46,6 +46,11 @@ namespace CinemaTicketBooking.Controllers
         public IActionResult Index()
         {
             var listOfAllMovies = _movieService.GetAllMovies();
+            foreach (var item in listOfAllMovies)
+            {
+                var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                item.MovieDescription = newdescription;
+            }
             return View(listOfAllMovies.ToList());
         }
 
@@ -105,6 +110,11 @@ namespace CinemaTicketBooking.Controllers
             if (cinemaAdded)
             {
                 var listOfAllCinemas = _movieService.GetAllMovies();
+                foreach (var item in listOfAllCinemas)
+                {
+                    var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                    item.MovieDescription = newdescription;
+                }
                 return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was added successfully!");
             }
 
@@ -131,6 +141,27 @@ namespace CinemaTicketBooking.Controllers
             return View(movie);
         }
 
+        public async Task<IActionResult> MovieProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var myMovie = await _movieService.GetMovieById(id ?? 1);
+            var showTime = _context.TblShowTime.Where(r => r.MovieId == myMovie.MovieId).FirstOrDefault();
+            ViewData["ShowTime"] = showTime.Time;
+
+            if (myMovie == null)
+            {
+                return NotFound();
+            }
+
+            return View(myMovie);
+        }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, MovieViewModel model)
@@ -150,6 +181,11 @@ namespace CinemaTicketBooking.Controllers
             if (movieEdited)
             {
                 var listOfAllCinemas = _movieService.GetAllMovies();
+                foreach (var item in listOfAllCinemas)
+                {
+                    var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                    item.MovieDescription = newdescription;
+                }
                 return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was edited successfully!");
             }
             else
@@ -184,6 +220,11 @@ namespace CinemaTicketBooking.Controllers
             if (movieDeleted)
             {
                 var listOfAllCinemas = _movieService.GetAllMovies();
+                foreach (var item in listOfAllCinemas)
+                {
+                    var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                    item.MovieDescription = newdescription;
+                }
                 return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Movie was deleted successfully!");
             }
             else

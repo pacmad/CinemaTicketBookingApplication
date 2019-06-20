@@ -107,6 +107,9 @@ namespace CinemaTicketBooking.Repository
         {
             var tblMobie = _context.TblMovie
                .Include(t => t.Cinema)
+                    .ThenInclude(t => t.Adress)
+                    .ThenInclude(t => t.Country)
+                    .ThenInclude(t => t.TblCities)
                .Include(t => t.CreatedByUser)
                .Include(t => t.ImageNavigation)
                .Include(t => t.Language)

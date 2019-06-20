@@ -36,13 +36,10 @@
                         <p class="text-left">
                             @Html.DisplayFor(model => model.MovieDescription)
                         </p>
-                        <div>
-                            <form asp-action="Delete">
-                                <input type="hidden" asp-for="MovieId" />
-                                <input type="submit" value="Delete" class="btn btn-block btn-danger" />
-                                <button asp-action="Index" role="button" class="btn btn-block btn-primary">Back to List</button>
-                            </form>
-                        </div>
+                        <button type="button" class="btn btn-block btn-success">
+                            Book now
+                        </button>
+                        <a role="button" class="btn btn-block btn-primary" asp-controller="Home" asp-action="Index">Back to List</a>
                     </div>
                 </div>
             </div>
