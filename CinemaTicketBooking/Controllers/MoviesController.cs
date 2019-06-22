@@ -48,7 +48,7 @@ namespace CinemaTicketBooking.Controllers
             var listOfAllMovies = _movieService.GetAllMovies();
             foreach (var item in listOfAllMovies)
             {
-                var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                var newdescription = item.MovieDescription.Length <= 40 ? item.MovieDescription : item.MovieDescription.Substring(0, 40) + "...";
                 item.MovieDescription = newdescription;
             }
             return View(listOfAllMovies.ToList());

@@ -110,20 +110,30 @@
     </div>
 </div>
 
-<div class="container" style="padding: 15px;">
-    @foreach (var item in Model)
-    {
-        <div class="col-sm-2" id="@item.MovieId">
-            <div class="thumbnail" width="220" height="242">
-                <img width="220" height="242" src="@Url.Content("~/images/"+item.ImageNavigation.ImagePath)" class="img-responsive">
-                <div class="caption">
-                    <a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId"><h3>@item.MovieName</h3></a>
-                    <p>@item.MovieDescription</p>
-                    <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3" style="padding-top: 10px;">
+                <div class="card" style="border:1px solid black;">                  
+                    <div class="card-block text-center" style="padding: 10px;">
+                        <img width="200" height="242" class="card-img-top" src="@Url.Content("~/images/"+item.ImageNavigation.ImagePath)" alt="Card image cap">
+                        <h4 class="card-title"><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId"><h3>@item.MovieName</h3></a></h4>
+                        <p class="card-text">@item.MovieDescription</p>
+                        <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
+                    </div>
+                    
+                    @*<div class="card-body">
+                        <div class="caption">
+                            <a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId"><h3>@item.MovieName</h3></a>
+                            <p>@item.MovieDescription</p>
+                            <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
+                        </div>
+                    </div>*@
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <script>
