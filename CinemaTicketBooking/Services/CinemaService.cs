@@ -99,6 +99,7 @@ namespace CinemaTicketBooking.Services
             cinemaToEdit.CinemaDescription = cinema.CinemaDescription;
             cinemaToEdit.CinemaName = cinema.CinemaName;
             cinemaToEdit.LastModifiedByUserId = cinema.LastModifiedByUserId;
+            cinemaToEdit.AdminUserId = cinema.AdminUserId;
             cinemaToEdit.LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
 
             return _cinemaRepository.EditCinema(cinemaToEdit);          

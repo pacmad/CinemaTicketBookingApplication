@@ -1,19 +1,17 @@
-﻿using System;
+﻿using CinemaTicketBooking.Entities;
+using CinemaTicketBooking.Extensions;
+using CinemaTicketBooking.Models;
+using CinemaTicketBooking.Models.SuperAdminViewModels;
+using CinemaTicketBooking.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CinemaTicketBooking.Entities;
-using CinemaTicketBooking.Services;
-using CinemaTicketBooking.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using CinemaTicketBooking.Models.SuperAdminViewModels;
-using CinemaTicketBooking.Extensions;
-using Microsoft.AspNetCore.Http;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -146,35 +144,24 @@ namespace CinemaTicketBooking.Controllers
             {
                 return NotFound();
             }
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+            string mail = user?.Email;
 
-            if (ModelState.IsValid)
+            model.LastModifiedByUserId = userId;
+
+            var cinemaAdded = _cinemaService.EditCinema(model);
+
+            if (cinemaAdded)
             {
-                var user = await GetCurrentUserAsync();
-                var userId = user?.Id;
-                string mail = user?.Email;
-
-                model.LastModifiedByUserId = userId;
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
-                var cinemaAdded = _cinemaService.EditCinema(model);
-
-                if (cinemaAdded)
-                {
-                    var listOfAllCinemas = _cinemaService.GetAllCinemas();
-                    return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Cinema was edited successfully!");
-                }
-
+                var listOfAllCinemas = _cinemaService.GetAllCinemas();
+                return View("Index", listOfAllCinemas.ToList()).WithSuccess("Info!", "Cinema was edited successfully!");
             }
+
             else
             {
                 return View(model);
             }
-
-            return BadRequest();
         }
 
         [Authorize(Roles = "SuperAdmin")]

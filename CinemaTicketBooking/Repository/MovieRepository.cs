@@ -75,7 +75,9 @@ namespace CinemaTicketBooking.Repository
                 .Include(t => t.TblReservations)
                 .Include(t => t.TblShowTime)
                 .Include(t => t.TblTicket)
-                .Where(r => r.IsDeleted == false).AsQueryable();
+                .Where(r => r.IsDeleted == false)
+                .Where(t => t.Cinema.IsDeleted == false)
+                .AsQueryable();
 
             if (model != null)
             {

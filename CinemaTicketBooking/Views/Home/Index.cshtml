@@ -115,21 +115,17 @@
         @foreach (var item in Model)
         {
             <div class="col-md-3" style="padding-top: 10px;">
-                <div class="card" style="border:1px solid black;">                  
+                <div class="card" style="border:1px solid; border-color: #4286f4;">
                     <div class="card-block text-center" style="padding: 10px;">
                         <img width="200" height="242" class="card-img-top" src="@Url.Content("~/images/"+item.ImageNavigation.ImagePath)" alt="Card image cap">
                         <h4 class="card-title"><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId"><h3>@item.MovieName</h3></a></h4>
                         <p class="card-text">@item.MovieDescription</p>
+                        <div class="well">
+                            <label>Cinema: @item.Cinema.CinemaName.Split(' ')[0]</label>
+                            <label>Date: @item.TblShowTime.FirstOrDefault().Time.Split(' ')[0]</label>
+                        </div>
                         <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
                     </div>
-                    
-                    @*<div class="card-body">
-                        <div class="caption">
-                            <a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId"><h3>@item.MovieName</h3></a>
-                            <p>@item.MovieDescription</p>
-                            <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
-                        </div>
-                    </div>*@
                 </div>
             </div>
         }
