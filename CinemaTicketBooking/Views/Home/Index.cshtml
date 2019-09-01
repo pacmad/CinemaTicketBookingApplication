@@ -159,10 +159,15 @@
             var model = { CountryId: country, CityId: city, MovieGenreId: genre, CinemaId: cinema, LanguageId: lang };
 
             $.ajax({
-                url: 'Home/FilterMovies',
-                data: model
-            }).done(function () {
-                alert('Added');
+                url: "Home/GetFilteredMovies",
+                data: model,
+                success: function (json) {
+                    console.log(json);
+                    // Do stuff with data
+                },
+                error: function (e) {
+                    alert(e);
+                }
             });
         }
         else {

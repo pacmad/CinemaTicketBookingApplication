@@ -64,10 +64,8 @@ namespace CinemaTicketBooking.Repository
         public List<TblMovie> GetFilteredMovies(MoviesFilterViewModel model)
         {
             var result = _context.TblMovie.Include(t => t.Cinema)
-                .Include(t => t.CreatedByUser)
                 .Include(t => t.ImageNavigation)
                 .Include(t => t.Language)
-                .Include(t => t.LastModifiedByUser)
                 .Include(t => t.Cinema)
                 .ThenInclude(t => t.Adress)
                 .Include(t => t.MovieGenre)
