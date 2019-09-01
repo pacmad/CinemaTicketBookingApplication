@@ -60,11 +60,16 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         [Required]
         public int LanguageId { get; set; }
 
+        public int CityId { get; set; }
+
+        public int CountryId { get; set; }
+
         [Required]
         public IFormFile Image { get; set; }
 
         [Required]
         public string ImagePath { get; set; }
+        public string CinemaName { get; set; }
 
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }

@@ -161,14 +161,11 @@
             $.ajax({
                 url: "Home/GetFilteredMovies",
                 data: model,
-                success: function (json) {
-                    console.log(json);
-                    // Do stuff with data
-                },
-                error: function (e) {
-                    alert(e);
-                }
-            });
+                method: "GET",
+                contentType: 'application/json'
+            }).done(function (data) {
+                console.log(data);
+            })
         }
         else {
             alert("Ske zgjedh asni filtrim");

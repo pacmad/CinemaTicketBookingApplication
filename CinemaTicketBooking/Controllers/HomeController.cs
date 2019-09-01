@@ -38,83 +38,88 @@ namespace CinemaTicketBooking.Controllers
 
             var listOfAllMovies = _movieService.GetFilteredMovies(model);
 
-            foreach(var item in listOfAllMovies)
+            foreach (var item in listOfAllMovies)
             {
                 var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
                 item.MovieDescription = newdescription;
             }
 
             return View(listOfAllMovies);
-
         }
 
-        public async Task<IActionResult> GetFilteredMovies(MoviesFilterViewModel model)
+        [HttpGet]
+        public async Task<JsonResult> GetFilteredMovies(MoviesFilterViewModel model)
         {
-
             try
             {
-                var result = await _context.TblMovie
-                    .Include(t => t.Cinema)
-                    .Include(t => t.ImageNavigation)
-                    .Include(t => t.Language)
-                    .Include(t => t.Cinema)
-                    //.Include(t => t.Ad)
-                    .Include(t => t.MovieGenre)
-                    .Include(t => t.TblCustomerComments)
-                    .Include(t => t.TblReservations)
-                    .Include(t => t.TblShowTime)
-                    .Include(t => t.TblTicket)
-                    .Where(r => r.IsDeleted == false)
-                    .Where(t => t.Cinema.IsDeleted == false)
-                    .ToListAsync();
+                var movies = await _context.TblMovie
+                .Include(t => t.ImageNavigation)
+                .Include(t => t.Language)
+                .Include(t => t.Cinema)
+                .ThenInclude(t => t.Adress)
+                .Include(t => t.MovieGenre)
+                .Include(t => t.TblCustomerComments)
+                .Include(t => t.TblReservations)
+                .Include(t => t.TblShowTime)
+                .Include(t => t.TblTicket)
+                .Where(r => r.IsDeleted == false)
+                .Where(t => t.Cinema.IsDeleted == false)
+                .ToListAsync();
 
-                var queryableList = result.AsQueryable();
+
+                var targetList = movies
+              .Select(x => new MovieViewModel()
+              {
+                  CinemaId = x.CinemaId,
+                  LanguageId = x.LanguageId,
+                  MovieId = x.MovieId,
+                  MovieGenreId = x.MovieGenreId ?? 1,
+                  IsBookable = x.IsBookable,
+                  MovieName = x.MovieName ?? "",
+                  MovieDescription = x.MovieDescription ?? "",
+                  ReleaseDate = x.ReleaseDate ?? "",
+                  MovieLength = x.MovieLength ?? "",
+                  PriceForAdults = x.PriceForAdults ?? "",
+                  PriceForChildrens = x.PriceForChildrens ?? "",
+                  ShowTime = x.TblShowTime.FirstOrDefault().Time.Split(' ')[0],
+                  Rating = x.Rating ?? "",
+                  ImagePath = x.ImageNavigation.ImagePath ?? "",
+                  CinemaName = x.Cinema.CinemaName,
+                  CityId = x.Cinema.Adress.CityId,
+                  CountryId = x.Cinema.Adress.CountryId
+              })
+              .ToList();
 
                 if (model != null)
                 {
                     if (model.MovieGenreId.HasValue)
                     {
-                        queryableList = queryableList.Where(x => x.MovieGenreId == model.MovieGenreId);
+                        targetList = targetList.Where(x => x.MovieGenreId == model.MovieGenreId).ToList();
                     }
                     if (model.CountryId.HasValue)
                     {
-                        queryableList = queryableList.Where(x => x.Cinema.Adress.CountryId == model.CountryId);
+                        targetList = targetList.Where(x => x.CountryId == model.CountryId).ToList();
                     }
                     if (model.CityId.HasValue)
                     {
-                        queryableList = queryableList.Where(x => x.Cinema.Adress.CityId == model.CityId);
+                        targetList = targetList.Where(x => x.CityId == model.CityId).ToList();
                     }
                     if (model.CinemaId.HasValue)
                     {
-                        queryableList = queryableList.Where(x => x.CinemaId == model.CinemaId);
+                        targetList = targetList.Where(x => x.CinemaId == model.CinemaId).ToList();
                     }
                     if (model.LanguageId.HasValue)
                     {
-                        queryableList = queryableList.Where(x => x.LanguageId == model.LanguageId);
+                        targetList = targetList.Where(x => x.LanguageId == model.LanguageId).ToList();
                     }
-               
                 }
 
-                var list = queryableList.Select(s => new {
-                    s.MovieId,
-                    s.CinemaId,
-                    s.MovieGenreId,
-                    s.IsBookable,
-                    s.MovieName,
-                    s.MovieDescription,
-                    s.ReleaseDate,
-                    s.MovieLength,
-                    s.PriceForAdults,
-                    s.PriceForChildrens,
-                    s.Rating,
-                    s.LanguageId
-                }).ToList();
 
-                return Ok(list);
+                return Json(targetList);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Json(ex);
             }
         }
 
