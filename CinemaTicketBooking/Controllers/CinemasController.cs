@@ -45,6 +45,13 @@ namespace CinemaTicketBooking.Controllers
         public IActionResult Index()
         {
             var listOfAllCinemas = _cinemaService.GetAllCinemas();
+
+            foreach (var item in listOfAllCinemas)
+            {
+                var newdescription = item.CinemaDescription.Length <= 40 ? item.CinemaDescription : item.CinemaDescription.Substring(0, 40) + "...";
+                item.CinemaDescription = newdescription;
+            }
+
             return View(listOfAllCinemas.ToList());
         }
 
