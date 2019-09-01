@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 <head>
+    <!-- Other head elements -->
     @Html.Partial("_Favicons")
 </head>
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
@@ -20,7 +21,7 @@
                 <p>
                     <kbd>Avengers: Endgame</kbd>
                     <a class="btn btn-primary small">
-                        Book your ticket now
+                        Book now
                     </a>
                 </p>
             </div>
@@ -31,7 +32,7 @@
                 <p>
                     <kbd>Black Panther</kbd>
                     <a class="btn btn-primary small">
-                        Book your ticket now
+                        Book now
                     </a>
                 </p>
             </div>
@@ -42,7 +43,7 @@
                 <p>
                     <kbd>A Star Is Born</kbd>
                     <a class="btn btn-primary small">
-                        Book your ticket now
+                        Book now
                     </a>
                 </p>
             </div>
@@ -53,7 +54,7 @@
                 <p>
                     <kbd>Widows</kbd>
                     <a class="btn btn-primary small">
-                        Book your ticket now
+                        Book now
                     </a>
                 </p>
             </div>
@@ -123,7 +124,7 @@
                             <label>Cinema: @item.Cinema.CinemaName.Split(' ')[0]</label>
                             <label>Date: @item.TblShowTime.FirstOrDefault().Time.Split(' ')[0]</label>
                         </div>
-                        <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book your ticket now</a></p>
+                        <p><a asp-controller="Movies" asp-action="MovieProfile" asp-route-id="@item.MovieId" class="btn btn-block btn-primary" role="button">Book now</a></p>
                     </div>
                 </div>
             </div>
@@ -132,7 +133,6 @@
 </div>
 
 <script>
-
     function myFunction() {
 
         var moviegenre = document.getElementById("MovieGenre");
@@ -150,13 +150,6 @@
         var chosencountry = document.getElementById("Country");
         var country = chosencountry.options[chosencountry.selectedIndex].value;
 
-
-        console.log(genre);
-        console.log(cinema);
-        console.log(city);
-        console.log(lang);
-        console.log(country);
-
         if ((genre != null || genre != "")
             || (cinema != null || cinema != "")
             || (city != null || city != "")
@@ -165,26 +158,12 @@
 
             var model = { CountryId: country, CityId: city, MovieGenreId: genre, CinemaId: cinema, LanguageId: lang };
 
-            console.warn(model);
-
-            //var request = $.ajax({
-            //    url: 'Home/FilterMovies',
-            //    type: 'Get',
-            //    data: model,
-            //    contentType: 'application/json; charset=utf-8'
-            //});
-
-            //request.done(function (data) {
-            //});
-
-            //request.fail(function (jqXHR, textStatus) {
-            //});
-            var url = '@Url.Action("FilterMovies", "Home")';
-            $.post(url, { CountryId: country, CityId: city, MovieGenreId: genre, CinemaId: cinema, LanguageId: lang },
-                function (data) {
-                    $("#FilterMovies").html(data);
-                });
-            //window.location.reload(true);
+            $.ajax({
+                url: 'Home/FilterMovies',
+                data: model
+            }).done(function () {
+                alert('Added');
+            });
         }
         else {
             alert("Ske zgjedh asni filtrim");

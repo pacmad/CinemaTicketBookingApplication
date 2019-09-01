@@ -39,7 +39,6 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         public int CityId { get; set; }
         public int CountryId { get; set; }
 
-        [Required]
         [Display(Name = "Address")]
         public string StreetName { get; set; }
 
