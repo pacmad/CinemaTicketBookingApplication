@@ -63,6 +63,8 @@ namespace CinemaTicketBooking
             services.AddTransient<IImageWriter,ImageWriter>();
 
             services.AddMvc();
+
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +93,8 @@ namespace CinemaTicketBooking
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseSession();
         }
     }
 }
