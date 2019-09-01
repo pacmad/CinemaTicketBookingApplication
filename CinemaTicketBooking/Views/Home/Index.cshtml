@@ -110,8 +110,8 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
+<div class="container" id="largeMovieContainer">
+    <div class="row" id="moviesContainer">
         @foreach (var item in Model)
         {
             <div class="col-md-3" style="padding-top: 10px;">
@@ -164,7 +164,68 @@
                 method: "GET",
                 contentType: 'application/json'
             }).done(function (data) {
-                console.log(data);
+
+                var elem = document.getElementById("moviesContainer");
+
+                if (elem != null && elem != undefined) {
+                    elem.remove();
+                }
+                else {
+                    var elem = document.getElementById("moviesContainerFinal");
+                    if (elem != null && elem != undefined) {
+                        elem.remove();
+                    }
+                }
+
+                const div = document.createElement('div');
+
+                div.className = 'row';
+
+                div.innerHTML = ``;
+
+                div.id = 'moviesContainerFinal';
+
+                document.getElementById('largeMovieContainer').appendChild(div);
+
+                for (var i = 0; i < data.length; i++) {
+
+                    console.log(data[i].movieId);
+
+                    var z = document.createElement('div');
+
+                    z.innerHTML = '<div class="col-md-3" style="padding-top: 10px;">'
+                        + '<div class="card" style="border:1px solid; border-color: #4286f4;">'
+                        + '<div class="card-block text-center" style="padding: 10px;">'
+                        + '<img width="200" height="242" class="card-img-top" src="imageGoesHere" alt="Card image cap">'
+                        + '<h4 class="card-title"><a href="/Movies/MovieProfile/'+ data[i].movieId +'"><h3>MovieNameGoesHere</h3></a></h4>'
+                        + '<p class="card-text">MovieDescriptionGoesHere</p>'
+                        + '<div class="well">'
+                        + '<label>Cinema: CinemaNameGoesHere</label>'
+                        + '</br>'
+                        + '<label>Date: ShowTimeGoesHere</label>'
+                        + '</div>'
+                        + '<p><a href="/Movies/MovieProfile/'+ data[i].movieId+'" class="btn btn-block btn-primary" role="button">Book now</a></p>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>';
+
+
+                    var ROOT = '@Url.Content("~")';
+
+                    var final = z.innerHTML.replace("imageGoesHere", ROOT + '/images/' + data[i].imagePath)
+                                .replace("MovieIdGoesHere", data[i].movieId)
+                                .replace("MovieNameGoesHere", data[i].movieName)
+                                .replace("MovieDescriptionGoesHere", data[i].movieDescription)
+                                .replace("CinemaNameGoesHere", data[i].cinemaName)
+                        .replace("ShowTimeGoesHere", data[i].showTime);
+
+                    console.log(final);
+
+                    z.innerHTML = final;
+
+
+                    document.getElementById('moviesContainerFinal').appendChild(z);
+                }
             })
         }
         else {

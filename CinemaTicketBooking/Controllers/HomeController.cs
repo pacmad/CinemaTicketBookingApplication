@@ -66,6 +66,12 @@ namespace CinemaTicketBooking.Controllers
                 .Where(t => t.Cinema.IsDeleted == false)
                 .ToListAsync();
 
+                foreach (var item in movies)
+                {
+                    var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                    item.MovieDescription = newdescription;
+                }
+
 
                 var targetList = movies
               .Select(x => new MovieViewModel()
