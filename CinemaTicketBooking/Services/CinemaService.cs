@@ -38,8 +38,8 @@ namespace CinemaTicketBooking.Services
                 StreetName = cinema.StreetName,
                 CreatedByUserId = cinema.CreatedByUserId,
                 LastModifiedByUserId = cinema.LastModifiedByUserId,
-                CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
-                LastModifiedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
+                CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
                 IsDeleted = false
             };
 
@@ -64,8 +64,8 @@ namespace CinemaTicketBooking.Services
                     CinemaProfilePicture = image.ImagePath,
                     CreatedByUserId = cinema.CreatedByUserId,
                     LastModifiedByUserId = cinema.LastModifiedByUserId,
-                    CreatedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
-                    LastModifiedOnDate = DateTime.Now.ToString("dd/mm/yyyy"),
+                    CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
                     AdminUser = cinema.AdminUser,
                     Adress = cinema.Adress,
                     CreatedByUser = cinema.CreatedByUser,
