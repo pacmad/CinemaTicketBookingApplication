@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CinemaTicketBooking.Controllers
@@ -55,6 +56,125 @@ namespace CinemaTicketBooking.Controllers
             ViewData["ListOfMovies"] = listOfAllMovies;
 
             return View(tblCinema);
+        }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            try
+            {
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+
+                var tblCinema = await _cinemaService.GetCinemaByAdminId(userId);
+
+                if (tblCinema == null)
+                {
+                    return NotFound();
+                }
+
+                var numberOfTicketsSold = _context.TblTicket.Where(r => r.CinemaId == tblCinema.CinemaId && r.IsDeleted == false).Count();
+                var moviesAvailable = _context.TblMovie.Where(r => r.CinemaId == tblCinema.CinemaId && r.IsDeleted == false).Count();
+
+                CinemaDashboardViewModel cinemaDashboard = new CinemaDashboardViewModel();
+                cinemaDashboard.NumberTicketsSold = numberOfTicketsSold;
+                cinemaDashboard.MoviesAvailable = moviesAvailable;
+
+                return View(cinemaDashboard);
+            }
+            catch (Exception ex)
+            {
+                return View("Index", null).WithSuccess("Error!", ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetMonthStatistics()
+        {
+            try
+            {
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+
+                var tblCinema = await _cinemaService.GetCinemaByAdminId(userId);
+
+                if (tblCinema == null)
+                {
+                    return null;
+                }
+
+                int[] monthsStatsForMoviesRegistered = new int[3];
+                int[] monthStatsForTicketsSold = new int[3];
+
+                int currentMonthMoviesRegistered = 0;
+                int secondMonthMoviesRegistered = 0;
+                int thirdMonthMoviesRegistered = 0;
+
+                int currentMonthTicketsSold = 0;
+                int secondMonthTicketsSold = 0;
+                int thirdMonthTicketsSold = 0;
+
+                CinemaDashboardMonthlyStatsViewModel model = new CinemaDashboardMonthlyStatsViewModel();
+
+                var ticketsSold = await _context.TblTicket.Where(r => r.CinemaId == tblCinema.CinemaId && r.IsDeleted == false).ToListAsync();
+                var moviesRegistered = await _context.TblMovie.Where(r=>r.CinemaId == tblCinema.CinemaId && r.IsDeleted == false).ToListAsync();
+
+                var currentmonth = DateTime.Now.ToString("MM");
+                var secondMonth = DateTime.Now.AddMonths(-1).ToString("MM");
+                var thirdMonth = DateTime.Now.AddMonths(-2).ToString("MM");
+
+                foreach (var item in ticketsSold)
+                {
+                    string[] words = item.CreatedOnDate.Split('/');
+
+                    if (words[1].Equals(currentmonth))
+                    {
+                        ++currentMonthTicketsSold;
+                    }
+                    else if (words[1].Equals(secondMonth))
+                    {
+                        ++secondMonthTicketsSold;
+                    }
+                    else if (words[1].Equals(thirdMonth))
+                    {
+                        ++thirdMonthTicketsSold;
+                    }
+                }
+
+                monthStatsForTicketsSold[0] = currentMonthTicketsSold;
+                monthStatsForTicketsSold[1] = secondMonthTicketsSold;
+                monthStatsForTicketsSold[2] = thirdMonthTicketsSold;
+
+                model.TicketsSold = monthStatsForTicketsSold;
+
+                foreach (var item in moviesRegistered)
+                {
+                    string[] words = item.CreatedOnDate.Split('/');
+                    if (words[1].Equals(currentmonth))
+                    {
+                        ++currentMonthMoviesRegistered;
+                    }
+                    else if (words[1].Equals(secondMonth))
+                    {
+                        ++secondMonthMoviesRegistered;
+                    }
+                    else if (words[1].Equals(thirdMonth))
+                    {
+                        ++thirdMonthMoviesRegistered;
+                    }
+                }
+
+                monthsStatsForMoviesRegistered[0] = currentMonthMoviesRegistered;
+                monthsStatsForMoviesRegistered[1] = secondMonthMoviesRegistered;
+                monthsStatsForMoviesRegistered[2] = thirdMonthMoviesRegistered;
+
+                model.MoviesRegistered = monthsStatsForMoviesRegistered;
+
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)

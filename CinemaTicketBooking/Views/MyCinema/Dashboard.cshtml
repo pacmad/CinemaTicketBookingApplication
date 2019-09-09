@@ -1,0 +1,139 @@
+﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.CinemaDashboardViewModel
+
+@{
+    ViewData["Title"] = "CinemaAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<div class="row" style="margin-top:20px;">
+
+    <div class="col-lg-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <i class="fas fa-film fa-5x"></i>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="announcement-heading" style="font-size:20px;"><strong>@Html.DisplayFor(model => model.MoviesAvailable)</strong></p>
+                        <p class="announcement-text" style="font-size:20px;"><strong>@Html.DisplayNameFor(model => model.MoviesAvailable)</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <i class="fas fa-ticket-alt fa-5x"></i>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="announcement-heading" style="font-size:20px;"><strong>@Html.DisplayFor(model => model.NumberTicketsSold)</strong></p>
+                        <p class="announcement-text" style="font-size:20px;"><strong>@Html.DisplayNameFor(model => model.NumberTicketsSold)</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <div class="col-md-6">
+        <canvas id="anotherchart"></canvas>
+    </div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "GetMonthStatistics",
+            method: "GET",
+            contentType: 'application/json'
+        }).done(function (data) {
+
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            const d = new Date();
+
+            const currentMonth = monthNames[d.getMonth()];
+            const secondMonth = monthNames[d.getMonth() - 1];
+            const thirdMonth = monthNames[d.getMonth() - 2];
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'line',
+
+                // The data for our dataset
+                data: {
+                    labels: [currentMonth, secondMonth, thirdMonth],
+                    datasets: [{
+                        label: 'Movies registered in past months',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: data.moviesRegistered
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+
+            var cta = document.getElementById('anotherchart');
+            var anotherchart = new Chart(cta, {
+                type: 'bar',
+                data: {
+                    labels: [currentMonth, secondMonth, thirdMonth],
+                    datasets: [{
+                        label: 'Tickets sold in past months',
+                        data: data.ticketsSold,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        })
+    });
+</script>
+
