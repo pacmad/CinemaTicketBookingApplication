@@ -10,7 +10,6 @@ namespace CinemaTicketBooking.Entities
             TblCustomerComments = new HashSet<TblCustomerComments>();
             TblMovie = new HashSet<TblMovie>();
             TblReservations = new HashSet<TblReservations>();
-            TblSeat = new HashSet<TblSeat>();
             TblShowTime = new HashSet<TblShowTime>();
             TblTicket = new HashSet<TblTicket>();
         }
@@ -21,6 +20,8 @@ namespace CinemaTicketBooking.Entities
         public string CinemaDescription { get; set; }
         public string CinemaProfilePicture { get; set; }
         public int AdressId { get; set; }
+        public int? SeatsRows { get; set; }
+        public int? SeatColumns { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string CreatedOnDate { get; set; }
@@ -34,7 +35,6 @@ namespace CinemaTicketBooking.Entities
         public ICollection<TblCustomerComments> TblCustomerComments { get; set; }
         public ICollection<TblMovie> TblMovie { get; set; }
         public ICollection<TblReservations> TblReservations { get; set; }
-        public ICollection<TblSeat> TblSeat { get; set; }
         public ICollection<TblShowTime> TblShowTime { get; set; }
         public ICollection<TblTicket> TblTicket { get; set; }
     }

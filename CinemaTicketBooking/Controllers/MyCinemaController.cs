@@ -209,6 +209,7 @@ namespace CinemaTicketBooking.Controllers
             string mail = user?.Email;
 
             model.LastModifiedByUserId = userId;
+            model.AdminUserId = userId;
 
             var cinemaAdded = _cinemaService.EditCinema(model);
 

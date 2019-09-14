@@ -149,6 +149,7 @@ namespace CinemaTicketBooking.Controllers
             }
 
             var myMovie = await _movieService.GetMovieById(id ?? 1);
+
             var showTime = _context.TblShowTime.Where(r => r.MovieId == myMovie.MovieId).FirstOrDefault();
             ViewData["ShowTime"] = showTime.Time;
 
@@ -158,6 +159,66 @@ namespace CinemaTicketBooking.Controllers
             }
 
             return View(myMovie);
+        }
+
+        public async Task<IActionResult> BookTicket(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account", $"/Movies/BookTicket/{id}");
+            }
+
+            var myMovie = await _movieService.GetMovieById(id??1);
+            myMovie.MovieId = id??1;
+
+            var showTime = _context.TblShowTime.Where(r => r.MovieId == myMovie.MovieId).FirstOrDefault();
+
+            ViewData["ShowTime"] = showTime.Time;
+
+            if (myMovie == null)
+            {
+                return NotFound();
+            }
+
+            return View(myMovie);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetSeatStatsForCinemaAndMovie(int movieId, int cinemaId)
+        {
+            try
+            {
+                MovieSeatsStatsViewModels model = new MovieSeatsStatsViewModels();
+
+                var myMovie = await _movieService.GetMovieById(movieId);
+
+                model.CinemaSeatColumns = myMovie.Cinema.SeatColumns ?? 0;
+                model.CinemaSeatRows = myMovie.Cinema.SeatsRows ?? 0;
+
+                var bookedSeatsForMovie = await _context.TblReservations.Where(r => r.ReservedInCinemaId == cinemaId && r.ReservedForMovieId == movieId && r.IsPaid == true).ToListAsync();
+
+                List<string> bookedSeats = new List<string>();
+
+                foreach(var item in bookedSeatsForMovie)
+                {
+                    bookedSeats.Add(item.Seat);
+                }
+
+                model.BookedSeats = bookedSeats;
+
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
         }
 
 

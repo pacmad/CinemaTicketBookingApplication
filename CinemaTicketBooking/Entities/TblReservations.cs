@@ -9,11 +9,11 @@ namespace CinemaTicketBooking.Entities
         public string ReservedByCustomerId { get; set; }
         public int ReservedForMovieId { get; set; }
         public int ReservedInCinemaId { get; set; }
-        public int ReservedInAdress { get; set; }
-        public int ReservationTime { get; set; }
+        public string ReservationTime { get; set; }
         public bool IsPaid { get; set; }
         public int PaymentTypeId { get; set; }
         public int ReservationStatusId { get; set; }
+        public string Seat { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string CreatedOnDate { get; set; }
@@ -26,7 +26,6 @@ namespace CinemaTicketBooking.Entities
         public TblReservationStatus ReservationStatus { get; set; }
         public AspNetUsers ReservedByCustomer { get; set; }
         public TblMovie ReservedForMovie { get; set; }
-        public TblAddress ReservedInAdressNavigation { get; set; }
         public TblCinema ReservedInCinema { get; set; }
     }
 }

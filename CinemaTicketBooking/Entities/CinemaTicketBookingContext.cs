@@ -37,10 +37,8 @@ namespace CinemaTicketBooking.Entities
         public virtual DbSet<TblPromotion> TblPromotion { get; set; }
         public virtual DbSet<TblReservations> TblReservations { get; set; }
         public virtual DbSet<TblReservationStatus> TblReservationStatus { get; set; }
-        public virtual DbSet<TblSeat> TblSeat { get; set; }
         public virtual DbSet<TblShowTime> TblShowTime { get; set; }
         public virtual DbSet<TblTicket> TblTicket { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -624,9 +622,15 @@ namespace CinemaTicketBooking.Entities
 
                 entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
 
+                entity.Property(e => e.ReservationTime)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
                 entity.Property(e => e.ReservedByCustomerId)
                     .IsRequired()
                     .HasMaxLength(450);
+
+                entity.Property(e => e.Seat).HasMaxLength(50);
 
                 entity.HasOne(d => d.CreatedByUser)
                     .WithMany(p => p.TblReservationsCreatedByUser)
@@ -661,12 +665,6 @@ namespace CinemaTicketBooking.Entities
                     .HasForeignKey(d => d.ReservedForMovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Reservations_tbl_Movie");
-
-                entity.HasOne(d => d.ReservedInAdressNavigation)
-                    .WithMany(p => p.TblReservations)
-                    .HasForeignKey(d => d.ReservedInAdress)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbl_Reservations_tbl_Address");
 
                 entity.HasOne(d => d.ReservedInCinema)
                     .WithMany(p => p.TblReservations)
@@ -708,33 +706,6 @@ namespace CinemaTicketBooking.Entities
                     .WithMany(p => p.TblReservationStatusLastModifiedByUser)
                     .HasForeignKey(d => d.LastModifiedByUserId)
                     .HasConstraintName("FK_tbl_ReservationStatus_AspNetUsers1");
-            });
-
-            modelBuilder.Entity<TblSeat>(entity =>
-            {
-                entity.HasKey(e => e.SeatId);
-
-                entity.ToTable("tbl_Seat");
-
-                entity.Property(e => e.CreatedByUserId)
-                    .HasMaxLength(450)
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.CreatedOnDate).HasMaxLength(150);
-
-                entity.Property(e => e.LastModifiedByUserId).HasMaxLength(450);
-
-                entity.Property(e => e.LastModifiedOnDate).HasMaxLength(150);
-
-                entity.Property(e => e.SeatNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Cinema)
-                    .WithMany(p => p.TblSeat)
-                    .HasForeignKey(d => d.CinemaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbl_Seat_tbl_Cinema");
             });
 
             modelBuilder.Entity<TblShowTime>(entity =>
@@ -804,13 +775,7 @@ namespace CinemaTicketBooking.Entities
                     .HasMaxLength(150)
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Price)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TotalPrice)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Seat).HasMaxLength(50);
 
                 entity.HasOne(d => d.Cinema)
                     .WithMany(p => p.TblTicket)
@@ -839,12 +804,6 @@ namespace CinemaTicketBooking.Entities
                     .HasForeignKey(d => d.MovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Ticket_tbl_Movie");
-
-                entity.HasOne(d => d.Seat)
-                    .WithMany(p => p.TblTicket)
-                    .HasForeignKey(d => d.SeatId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbl_Ticket_tbl_Seat");
             });
         }
     }

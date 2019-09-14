@@ -9,9 +9,9 @@ namespace CinemaTicketBooking.Entities
         public string CustomerId { get; set; }
         public int CinemaId { get; set; }
         public int MovieId { get; set; }
-        public int SeatId { get; set; }
-        public string Price { get; set; }
-        public string TotalPrice { get; set; }
+        public string Seat { get; set; }
+        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string CreatedOnDate { get; set; }
@@ -23,6 +23,5 @@ namespace CinemaTicketBooking.Entities
         public AspNetUsers Customer { get; set; }
         public AspNetUsers LastModifiedByUser { get; set; }
         public TblMovie Movie { get; set; }
-        public TblSeat Seat { get; set; }
     }
 }

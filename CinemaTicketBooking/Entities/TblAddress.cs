@@ -8,7 +8,6 @@ namespace CinemaTicketBooking.Entities
         public TblAddress()
         {
             TblCinema = new HashSet<TblCinema>();
-            TblReservations = new HashSet<TblReservations>();
         }
 
         public int AdressId { get; set; }
@@ -27,6 +26,5 @@ namespace CinemaTicketBooking.Entities
         public AspNetUsers CreatedByUser { get; set; }
         public AspNetUsers LastModifiedByUser { get; set; }
         public ICollection<TblCinema> TblCinema { get; set; }
-        public ICollection<TblReservations> TblReservations { get; set; }
     }
 }
