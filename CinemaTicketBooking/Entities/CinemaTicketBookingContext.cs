@@ -645,13 +645,11 @@ namespace CinemaTicketBooking.Entities
                 entity.HasOne(d => d.PaymentType)
                     .WithMany(p => p.TblReservations)
                     .HasForeignKey(d => d.PaymentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Reservations_tbl_PaymentType");
 
                 entity.HasOne(d => d.ReservationStatus)
                     .WithMany(p => p.TblReservations)
                     .HasForeignKey(d => d.ReservationStatusId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbl_Reservations_tbl_ReservationStatus");
 
                 entity.HasOne(d => d.ReservedByCustomer)

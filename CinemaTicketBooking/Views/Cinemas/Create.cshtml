@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data" class="form-horizontal">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Cinema Admin</label>
@@ -39,6 +39,16 @@
                 <span asp-validation-for="StreetName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Cinema seat rows</label>
+                <input type="number" asp-for="SeatsRows" class="form-control" />
+                <span asp-validation-for="SeatsRows" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Cinema seat columns</label>
+                <input type="number" asp-for="SeatColumns" class="form-control" />
+                <span asp-validation-for="SeatColumns" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <input asp-for="Image" type="file" class="form-control" style="height:auto" />
             </div>
@@ -46,8 +56,8 @@
                 <input type="submit" value="Create" class="btn btn-success" />
                 <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
                 @*<div>
-                    <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
-                </div>*@
+                <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
+            </div>*@
             </div>
         </form>
     </div>

@@ -68,6 +68,8 @@ namespace CinemaTicketBooking.Services
                     LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
                     AdminUser = cinema.AdminUser,
                     Adress = cinema.Adress,
+                    SeatColumns = cinema.SeatColumns,
+                    SeatsRows = cinema.SeatsRows,
                     CreatedByUser = cinema.CreatedByUser,
                     LastModifiedByUser = cinema.LastModifiedByUser,
                     IsDeleted = false

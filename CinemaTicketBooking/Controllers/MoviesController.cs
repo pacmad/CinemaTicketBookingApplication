@@ -75,7 +75,7 @@ namespace CinemaTicketBooking.Controllers
         {
             var showTimes = _context.TblShowTime.ToList();
 
-            ViewData["CinemaId"] = new SelectList(_context.TblCinema.Where(r=>r.IsDeleted==false), "CinemaId", "CinemaName");
+            ViewData["CinemaId"] = new SelectList(_context.TblCinema.Where(r => r.IsDeleted == false), "CinemaId", "CinemaName");
             ViewData["LanguageId"] = new SelectList(_context.TblLanguage, "LanguageId", "LanguageName");
             ViewData["MovieGenreId"] = new SelectList(_context.TblMovieGenre, "MovieGenreId", "GenreDescription");
             ViewData["ShowTimes"] = showTimes;
@@ -175,8 +175,8 @@ namespace CinemaTicketBooking.Controllers
                 return RedirectToAction("Login", "Account", $"/Movies/BookTicket/{id}");
             }
 
-            var myMovie = await _movieService.GetMovieById(id??1);
-            myMovie.MovieId = id??1;
+            var myMovie = await _movieService.GetMovieById(id ?? 1);
+            myMovie.MovieId = id ?? 1;
 
             var showTime = _context.TblShowTime.Where(r => r.MovieId == myMovie.MovieId).FirstOrDefault();
 
@@ -188,6 +188,54 @@ namespace CinemaTicketBooking.Controllers
             }
 
             return View(myMovie);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitReservation([FromBody] BookTicketReservationViewModel model)
+        {
+
+            try
+            {
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+                string mail = user?.Email;
+
+                var myMovie = await _movieService.GetMovieById(model.movieId ?? 1);
+
+                if (user != null)
+                {
+                    foreach (var item in model.selectedSeats)
+                    {
+                        TblReservations reservation = new TblReservations();
+                        reservation.ReservedByCustomerId = userId;
+                        reservation.ReservedForMovieId = model.movieId ?? 0;
+                        reservation.ReservedInCinemaId = myMovie.Cinema.CinemaId;
+                        reservation.ReservationTime = DateTime.Now.ToString("dd/MM/yyyy h:mm tt");
+                        reservation.IsPaid = false;
+                        reservation.ReservationStatusId = 2;
+                        reservation.Seat = item.Id;
+                        reservation.CreatedByUserId = userId;
+                        reservation.LastModifiedByUserId = userId;
+                        reservation.CreatedOnDate = DateTime.Now.ToString();
+                        reservation.LastModifiedOnDate = DateTime.Now.ToString();
+
+                        await _context.TblReservations.AddAsync(reservation);
+
+                    }
+
+                    if (_context.SaveChanges() > 0)
+                    {
+                        return Ok();
+                    }
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         [HttpGet]
@@ -206,7 +254,7 @@ namespace CinemaTicketBooking.Controllers
 
                 List<string> bookedSeats = new List<string>();
 
-                foreach(var item in bookedSeatsForMovie)
+                foreach (var item in bookedSeatsForMovie)
                 {
                     bookedSeats.Add(item.Seat);
                 }

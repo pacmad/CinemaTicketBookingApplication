@@ -1,7 +1,7 @@
 ﻿@model CinemaTicketBooking.Models.SuperAdminViewModels.MovieViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Book Ticket";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -106,8 +106,28 @@
         });
 
         $('#btnGetSelected').click(function () {
-            seats.getSelected();
-            console.log(seats.getSelected());
+
+            let selectedSeats = seats.getSelected();
+            console.log(selectedSeats);
+
+            var movieId = @(Model.MovieId);
+
+            var reservation = {
+                "selectedSeats": selectedSeats,
+                "movieId": movieId,
+            };
+
+            $.ajax({
+                url: '/Movies/SubmitReservation/',
+                data: JSON.stringify(reservation),
+                contentType: 'application/json',
+                type: 'POST',
+                success: function (data) {
+                    window.location.href = "/Home";
+                    
+                }
+            });
+
         });
     }
     })(jQuery);

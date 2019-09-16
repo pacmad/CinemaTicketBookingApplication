@@ -48,7 +48,7 @@ namespace CinemaTicketBooking.Controllers
 
             foreach (var item in listOfAllCinemas)
             {
-                var newdescription = item.CinemaDescription.Length <= 40 ? item.CinemaDescription : item.CinemaDescription.Substring(0, 40) + "...";
+                var newdescription = item.CinemaDescription.Length <= 20 ? item.CinemaDescription : item.CinemaDescription.Substring(0, 20) + "...";
                 item.CinemaDescription = newdescription;
             }
 

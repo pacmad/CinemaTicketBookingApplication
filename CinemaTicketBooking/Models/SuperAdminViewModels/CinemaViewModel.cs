@@ -49,6 +49,12 @@ namespace CinemaTicketBooking.Models.SuperAdminViewModels
         [Required]
         public IFormFile Image { get; set; }
 
+        [Display(Name = "Seat rows")]
+        public int? SeatsRows { get; set; }
+
+        [Display(Name = "Seat columns")]
+        public int? SeatColumns { get; set; }
+
         [Required]
         public string ImagePath { get; set; }
 

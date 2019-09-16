@@ -53,6 +53,13 @@ namespace CinemaTicketBooking.Controllers
             }
 
             var listOfAllMovies = _movieService.GetMoviesByCinemaId(tblCinema.CinemaId);
+
+            foreach (var item in listOfAllMovies)
+            {
+                var newdescription = item.MovieDescription.Length <= 60 ? item.MovieDescription : item.MovieDescription.Substring(0, 60) + "...";
+                item.MovieDescription = newdescription;
+            }
+
             ViewData["ListOfMovies"] = listOfAllMovies;
 
             return View(tblCinema);

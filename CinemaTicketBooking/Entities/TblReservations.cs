@@ -11,8 +11,8 @@ namespace CinemaTicketBooking.Entities
         public int ReservedInCinemaId { get; set; }
         public string ReservationTime { get; set; }
         public bool IsPaid { get; set; }
-        public int PaymentTypeId { get; set; }
-        public int ReservationStatusId { get; set; }
+        public int? PaymentTypeId { get; set; }
+        public int? ReservationStatusId { get; set; }
         public string Seat { get; set; }
         public string CreatedByUserId { get; set; }
         public string LastModifiedByUserId { get; set; }
