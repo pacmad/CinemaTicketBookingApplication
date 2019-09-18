@@ -216,7 +216,7 @@ namespace CinemaTicketBooking.Controllers
                         reservation.Seat = item.Id;
                         reservation.CreatedByUserId = userId;
                         reservation.LastModifiedByUserId = userId;
-                        reservation.CreatedOnDate = DateTime.Now.ToString();
+                        reservation.CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
                         reservation.LastModifiedOnDate = DateTime.Now.ToString();
 
                         await _context.TblReservations.AddAsync(reservation);

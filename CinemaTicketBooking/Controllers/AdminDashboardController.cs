@@ -67,7 +67,8 @@ namespace CinemaTicketBooking.Controllers
         [HttpGet]
         public async Task<JsonResult> GetMonthStatistics()
         {
-            try {
+            try
+            {
 
                 int[] monthsStatsForCinemas = new int[3];
                 int[] monthStatsForMovies = new int[3];
@@ -89,7 +90,7 @@ namespace CinemaTicketBooking.Controllers
                 var secondMonth = DateTime.Now.AddMonths(-1).ToString("MM");
                 var thirdMonth = DateTime.Now.AddMonths(-2).ToString("MM");
 
-                foreach(var item in cinemas)
+                foreach (var item in cinemas)
                 {
                     string[] words = item.CreatedOnDate.Split('/');
                     if (words[1].Equals(currentmonth))
@@ -115,17 +116,22 @@ namespace CinemaTicketBooking.Controllers
                 foreach (var item in movies)
                 {
                     string[] words = item.CreatedOnDate.Split('/');
-                    if (words[1].Equals(currentmonth))
+
+                    if (!string.IsNullOrEmpty(words[1]))
                     {
-                        ++currentMonthMovies;
-                    }
-                    else if (words[1].Equals(secondMonth))
-                    {
-                        ++secondMonthMovies;
-                    }
-                    else if (words[1].Equals(thirdMonth))
-                    {
-                        ++thirdMonthMovies;
+
+                        if (words[1].Equals(currentmonth))
+                        {
+                            ++currentMonthMovies;
+                        }
+                        else if (words[1].Equals(secondMonth))
+                        {
+                            ++secondMonthMovies;
+                        }
+                        else if (words[1].Equals(thirdMonth))
+                        {
+                            ++thirdMonthMovies;
+                        }
                     }
                 }
 

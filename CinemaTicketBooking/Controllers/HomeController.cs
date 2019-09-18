@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CinemaTicketBooking.Models.SuperAdminViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace CinemaTicketBooking.Controllers
 {
@@ -19,11 +21,21 @@ namespace CinemaTicketBooking.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly CinemaTicketBookingContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger _logger;
+        private readonly IImageHandler _imageHandler;
 
-        public HomeController(CinemaTicketBookingContext context, IMovieService movieService)
+        public HomeController(CinemaTicketBookingContext context, 
+            IMovieService movieService, 
+            UserManager<ApplicationUser> userManager,
+            ILogger<AccountController> logger,
+            IImageHandler imageHandler)
         {
+            _userManager = userManager;
             _context = context;
+            _logger = logger;
             _movieService = movieService;
+            _imageHandler = imageHandler;
         }
 
         [HttpGet]
@@ -147,6 +159,75 @@ namespace CinemaTicketBooking.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public async Task<IActionResult> MyBookings()
+        {
+
+            try
+            {
+                var user = await GetCurrentUserAsync();
+
+                if(user == null)
+                {
+                    return BadRequest("There is no logged in user.");
+                }
+
+                var reservations = await _context.TblReservations
+                    .Include(t=>t.ReservedInCinema)
+                    .Include(t => t.ReservedForMovie)
+                    .ThenInclude(t=>t.ImageNavigation)
+                    .Where(r => r.ReservedByCustomerId == user.Id 
+                    && r.IsPaid == false 
+                    && r.ReservationStatusId == 2
+                    && r.IsDeleted == false).ToListAsync();
+
+                if(reservations == null)
+                {
+                    return BadRequest("Could not get reservations for user.");
+                }
+
+                decimal totalPrice = 0;
+
+                foreach(var item in reservations)
+                {
+                    totalPrice += Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
+                }
+
+                ViewData["TotalPrice"] = totalPrice.ToString();
+
+                return View(reservations);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveReservation([FromBody]int reservationId)
+        {
+            var reservation = await _context.TblReservations.Where(r => r.ReservationId == reservationId).FirstOrDefaultAsync();
+
+            if(reservation != null)
+            {
+                reservation.IsDeleted = true;
+                _context.TblReservations.Update(reservation);
+                _context.Entry(reservation).State = EntityState.Modified;
+
+                if(_context.SaveChanges() > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Could not delete reservation");
+                }
+            }
+            else
+            {
+                return BadRequest("Could not find reservation");
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SaveMessage(TblFeedback model)
@@ -166,6 +247,8 @@ namespace CinemaTicketBooking.Controllers
 
             return View("Index").WithSuccess("Info!", "Your comment was saved successfully!");
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
     }
 }

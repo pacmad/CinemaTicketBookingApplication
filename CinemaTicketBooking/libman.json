@@ -10,6 +10,10 @@
     {
       "library": "Chart.js@2.8.0",
       "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "jquery-confirm@3.3.4",
+      "destination": "wwwroot/lib/jquery-confirm/"
     }
   ]
 }
