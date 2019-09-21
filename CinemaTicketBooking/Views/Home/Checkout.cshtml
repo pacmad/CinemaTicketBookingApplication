@@ -1,8 +1,150 @@
-﻿
+﻿@model IEnumerable<CinemaTicketBooking.Entities.TblReservations>
+
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Checkout</h2>
+<html>
+<head>
+    <title>Payment</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/payment.css">
+</head>
+<body>
+    <main class="page payment-page">
+        @if (@Model.Count() > 0)
+        {
+            <section>
+                <div class="container" style="margin-top:15px;">
+                    <div class="block-heading">
+                        <div class="well">
+                            <h2>Payment</h2>
+                            <p>Enter your payment details to complete your payment.</p>
+                        </div>
+                    </div>
+                    <div class="products" style="padding-bottom:40px;">
+                        <h3 class="title">Checkout</h3>
+                        <div>
+                            @foreach (var item in Model)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="col-md-8">
+                                            <h4 class="item-name" style="color:darkblue"><strong>@item.ReservedForMovie.MovieName</strong></h4>
+                                            <h5 class="item-description"><strong>Cinema: </strong>@item.ReservedInCinema.CinemaName</h5>
+                                            <h5 class="item-description"><strong>Show time: </strong>@item.ReservationTime</h5>
+                                            <h5 class="item-description"><strong>Seat: </strong>@item.Seat</h5>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <h5 class="price"><strong>@item.ReservedForMovie.PriceForAdults €</strong></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <hr />
+                        <div style="margin-top:15px;">
+                            <div class="col-md-8">
+                                <h4>Total</h4>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h4 class="price"><strong>@ViewData["TotalPrice"] €</strong></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card-details">
+                        <div class="well">
+                            <h3 class="title">Credit Card Details</h3>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label for="card-holder">Card Holder</label>
+                                <input id="card-holder" type="text" class="form-control" placeholder="Card Holder" aria-label="Card Holder" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="">Expiration Date</label>
+                                <div class="input-group expiration-date" style="width:50%; flex:auto;">
+                                    <input id="expirationMonth" type="number" class="form-control" placeholder="MM" aria-label="MM" aria-describedby="basic-addon1">
+                                    <span class="date-separator">/</span>
+                                    <input id="expirationYear" type="number" class="form-control" placeholder="YY" aria-label="YY" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-8">
+                                <label for="card-number">Card Number</label>
+                                <input id="card-number" type="number" class="form-control" placeholder="Card Number" aria-label="Card Holder" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="cvc">CVC</label>
+                                <input style="width:50%" id="cvc" type="number" class="form-control" placeholder="CVC" aria-label="Card Holder" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <a id="btnGetSelected" class="btn btn-primary btn-block">Proceed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="col-md-offset-3" style="margin-top:25px;">
+                    <h2>You haven't made any reservation yet.</h2>
+                </div>
+            </div>
+        }
+    </main>
+</body>
+</html>
 
+<script>
+    (function ($) {
+
+        $('#btnGetSelected').click(function () {
+
+            var cardholder = $('#card-holder').val();
+
+            if (cardholder == null || cardholder == undefined || cardholder == '') {
+
+                alert("Card holder is required");
+            }
+
+            var expirationMonth = $('#expirationMonth').val();
+
+            if (expirationMonth == null || expirationMonth == undefined || expirationMonth == '') {
+
+                alert("Card month expiration date is required");
+            }
+
+            var cardnumber = $('#card-number').val();
+
+            if (cardnumber == null || cardnumber == undefined || cardnumber == '') {
+
+                alert("Card number is required");
+            }
+
+            var cvc = $('#cvc').val();
+
+            if (cvc == null || cvc == undefined || cvc == '') {
+
+                alert("CVC is required");
+            }
+
+            $.ajax({
+                url: '/Home/PayTickets/',
+                contentType: 'application/json',
+                type: 'POST',
+                success: function (data) {
+                    window.location.href = "/Home";
+                }
+            });
+        });
+    })(jQuery);
+
+
+</script>

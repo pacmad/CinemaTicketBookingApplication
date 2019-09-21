@@ -228,6 +228,120 @@ namespace CinemaTicketBooking.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+
+            try
+            {
+                var user = await GetCurrentUserAsync();
+
+                if (user == null)
+                {
+                    return BadRequest("There is no logged in user.");
+                }
+
+                var reservations = await _context.TblReservations
+                    .Include(t => t.ReservedInCinema)
+                    .Include(t => t.ReservedForMovie)
+                    .ThenInclude(t => t.ImageNavigation)
+                    .Where(r => r.ReservedByCustomerId == user.Id
+                    && r.IsPaid == false
+                    && r.ReservationStatusId == 2
+                    && r.IsDeleted == false).ToListAsync();
+
+                if (reservations == null)
+                {
+                    return BadRequest("Could not get reservations for user.");
+                }
+
+                decimal totalPrice = 0;
+
+                foreach (var item in reservations)
+                {
+                    totalPrice += Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
+                }
+
+                ViewData["TotalPrice"] = totalPrice.ToString();
+
+                return View(reservations);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PayTickets()
+        {
+            try
+            {
+                var user = await GetCurrentUserAsync();
+
+                if (user == null)
+                {
+                    return BadRequest("There is no logged in user.");
+                }
+
+                var reservations = await _context.TblReservations
+                    .Include(t => t.ReservedInCinema)
+                    .Include(t => t.ReservedForMovie)
+                    .ThenInclude(t => t.ImageNavigation)
+                    .Where(r => r.ReservedByCustomerId == user.Id
+                    && r.IsPaid == false
+                    && r.ReservationStatusId == 2
+                    && r.IsDeleted == false).ToListAsync();
+
+                if (reservations == null)
+                {
+                    return BadRequest("Could not get reservations for user.");
+                }
+
+                decimal totalPrice = 0;
+
+                foreach (var item in reservations)
+                {
+                    totalPrice += Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
+                }
+
+                ViewData["TotalPrice"] = totalPrice.ToString();
+
+                foreach(var item in reservations)
+                {
+                    item.IsPaid = true;
+                    item.PaymentTypeId = 2;
+                    item.ReservationStatusId = 1;
+                    _context.TblReservations.Update(item);
+                    _context.Entry(item).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    TblTicket ticket = new TblTicket();
+                    ticket.CustomerId = user.Id;
+                    ticket.CinemaId = item.ReservedInCinema.CinemaId;
+                    ticket.MovieId = item.ReservedForMovie.MovieId;
+                    ticket.Seat = item.Seat;
+                    ticket.Price = Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
+                    ticket.TotalPrice = Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
+                    ticket.CreatedByUserId = user.Id;
+                    ticket.LastModifiedByUserId = user.Id;
+                    ticket.CreatedOnDate = DateTime.Now.ToShortDateString();
+                    ticket.LastModifiedOnDate = DateTime.Now.ToShortDateString();
+
+                    await _context.TblTicket.AddAsync(ticket);
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SaveMessage(TblFeedback model)
