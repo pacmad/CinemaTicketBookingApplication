@@ -133,17 +133,21 @@ namespace CinemaTicketBooking.Controllers
                 {
                     string[] words = item.CreatedOnDate.Split('/');
 
-                    if (words[1].Equals(currentmonth))
+                    if (!string.IsNullOrEmpty(words[1]))
                     {
-                        ++currentMonthTicketsSold;
-                    }
-                    else if (words[1].Equals(secondMonth))
-                    {
-                        ++secondMonthTicketsSold;
-                    }
-                    else if (words[1].Equals(thirdMonth))
-                    {
-                        ++thirdMonthTicketsSold;
+
+                        if (words[1].Equals(currentmonth))
+                        {
+                            ++currentMonthTicketsSold;
+                        }
+                        else if (words[1].Equals(secondMonth))
+                        {
+                            ++secondMonthTicketsSold;
+                        }
+                        else if (words[1].Equals(thirdMonth))
+                        {
+                            ++thirdMonthTicketsSold;
+                        }
                     }
                 }
 
@@ -156,17 +160,22 @@ namespace CinemaTicketBooking.Controllers
                 foreach (var item in moviesRegistered)
                 {
                     string[] words = item.CreatedOnDate.Split('/');
-                    if (words[1].Equals(currentmonth))
+
+                    if (!string.IsNullOrEmpty(words[1]))
                     {
-                        ++currentMonthMoviesRegistered;
-                    }
-                    else if (words[1].Equals(secondMonth))
-                    {
-                        ++secondMonthMoviesRegistered;
-                    }
-                    else if (words[1].Equals(thirdMonth))
-                    {
-                        ++thirdMonthMoviesRegistered;
+
+                        if (words[1].Equals(currentmonth))
+                        {
+                            ++currentMonthMoviesRegistered;
+                        }
+                        else if (words[1].Equals(secondMonth))
+                        {
+                            ++secondMonthMoviesRegistered;
+                        }
+                        else if (words[1].Equals(thirdMonth))
+                        {
+                            ++thirdMonthMoviesRegistered;
+                        }
                     }
                 }
 

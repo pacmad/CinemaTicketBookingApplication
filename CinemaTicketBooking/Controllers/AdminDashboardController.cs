@@ -93,17 +93,22 @@ namespace CinemaTicketBooking.Controllers
                 foreach (var item in cinemas)
                 {
                     string[] words = item.CreatedOnDate.Split('/');
-                    if (words[1].Equals(currentmonth))
+
+                    if (!string.IsNullOrEmpty(words[1]))
                     {
-                        ++currentMonthCinemas;
-                    }
-                    else if (words[1].Equals(secondMonth))
-                    {
-                        ++secondMonthCinemas;
-                    }
-                    else if (words[1].Equals(thirdMonth))
-                    {
-                        ++thirdMonthCinemas;
+
+                        if (words[1].Equals(currentmonth))
+                        {
+                            ++currentMonthCinemas;
+                        }
+                        else if (words[1].Equals(secondMonth))
+                        {
+                            ++secondMonthCinemas;
+                        }
+                        else if (words[1].Equals(thirdMonth))
+                        {
+                            ++thirdMonthCinemas;
+                        }
                     }
                 }
 

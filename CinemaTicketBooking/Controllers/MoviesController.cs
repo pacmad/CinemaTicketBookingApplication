@@ -97,6 +97,7 @@ namespace CinemaTicketBooking.Controllers
 
             model.CreatedByUserId = userId;
             model.LastModifiedByUserId = userId;
+            model.CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy");
             //model.CinemaId = cinema.CinemaId;
 
             var result = await UploadImage(model.Image);

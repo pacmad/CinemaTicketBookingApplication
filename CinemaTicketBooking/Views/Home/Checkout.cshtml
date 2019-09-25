@@ -112,6 +112,7 @@
             if (cardholder == null || cardholder == undefined || cardholder == '') {
 
                 alert("Card holder is required");
+                return;
             }
 
             var expirationMonth = $('#expirationMonth').val();
@@ -119,6 +120,7 @@
             if (expirationMonth == null || expirationMonth == undefined || expirationMonth == '') {
 
                 alert("Card month expiration date is required");
+                return;
             }
 
             var cardnumber = $('#card-number').val();
@@ -126,6 +128,7 @@
             if (cardnumber == null || cardnumber == undefined || cardnumber == '') {
 
                 alert("Card number is required");
+                return;
             }
 
             var cvc = $('#cvc').val();
@@ -133,6 +136,7 @@
             if (cvc == null || cvc == undefined || cvc == '') {
 
                 alert("CVC is required");
+                return;
             }
 
             $.ajax({

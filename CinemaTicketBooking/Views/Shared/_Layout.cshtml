@@ -62,6 +62,12 @@
                                     <a asp-area="" asp-controller="MyCinema" asp-action="Dashboard">Dashboard</a>
                                 </li>
                             }
+                            else if (User.IsInRole("SimpleUser"))
+                            {
+                                <li>
+                                    <a asp-area="" asp-controller="Home" asp-action="MyTickets">My Tickets</a>
+                                </li>
+                            }
                         }
                     }
                 </ul>

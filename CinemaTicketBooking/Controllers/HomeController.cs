@@ -25,8 +25,8 @@ namespace CinemaTicketBooking.Controllers
         private readonly ILogger _logger;
         private readonly IImageHandler _imageHandler;
 
-        public HomeController(CinemaTicketBookingContext context, 
-            IMovieService movieService, 
+        public HomeController(CinemaTicketBookingContext context,
+            IMovieService movieService,
             UserManager<ApplicationUser> userManager,
             ILogger<AccountController> logger,
             IImageHandler imageHandler)
@@ -149,6 +149,24 @@ namespace CinemaTicketBooking.Controllers
             return View();
         }
 
+        public async Task<IActionResult> MyTickets()
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return BadRequest("There is no logged in user.");
+            }
+
+            var userTickets = await _context.TblTicket
+                .Include(t => t.Cinema)
+                .Include(t => t.Movie)
+                .ThenInclude(t => t.TblShowTime)
+                .Where(r => r.CustomerId == user.Id && r.IsDeleted == false).ToListAsync();
+
+            return View(userTickets);
+        }
+
         public IActionResult Contact()
         {
             return View();
@@ -166,28 +184,28 @@ namespace CinemaTicketBooking.Controllers
             {
                 var user = await GetCurrentUserAsync();
 
-                if(user == null)
+                if (user == null)
                 {
                     return BadRequest("There is no logged in user.");
                 }
 
                 var reservations = await _context.TblReservations
-                    .Include(t=>t.ReservedInCinema)
+                    .Include(t => t.ReservedInCinema)
                     .Include(t => t.ReservedForMovie)
-                    .ThenInclude(t=>t.ImageNavigation)
-                    .Where(r => r.ReservedByCustomerId == user.Id 
-                    && r.IsPaid == false 
+                    .ThenInclude(t => t.ImageNavigation)
+                    .Where(r => r.ReservedByCustomerId == user.Id
+                    && r.IsPaid == false
                     && r.ReservationStatusId == 2
                     && r.IsDeleted == false).ToListAsync();
 
-                if(reservations == null)
+                if (reservations == null)
                 {
                     return BadRequest("Could not get reservations for user.");
                 }
 
                 decimal totalPrice = 0;
 
-                foreach(var item in reservations)
+                foreach (var item in reservations)
                 {
                     totalPrice += Convert.ToDecimal(item.ReservedForMovie.PriceForAdults);
                 }
@@ -196,7 +214,7 @@ namespace CinemaTicketBooking.Controllers
 
                 return View(reservations);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -207,13 +225,13 @@ namespace CinemaTicketBooking.Controllers
         {
             var reservation = await _context.TblReservations.Where(r => r.ReservationId == reservationId).FirstOrDefaultAsync();
 
-            if(reservation != null)
+            if (reservation != null)
             {
                 reservation.IsDeleted = true;
                 _context.TblReservations.Update(reservation);
                 _context.Entry(reservation).State = EntityState.Modified;
 
-                if(_context.SaveChanges() > 0)
+                if (_context.SaveChanges() > 0)
                 {
                     return Ok();
                 }
@@ -226,6 +244,46 @@ namespace CinemaTicketBooking.Controllers
             {
                 return BadRequest("Could not find reservation");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTicket(int? TicketId)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return BadRequest("There is no logged in user.");
+            }
+
+            var userTickets = await _context.TblTicket
+            .Include(t => t.Cinema)
+            .Include(t => t.Movie)
+            .ThenInclude(t => t.TblShowTime)
+            .Where(r => r.CustomerId == user.Id && r.IsDeleted == false).ToListAsync();
+
+            var ticket = await _context.TblTicket.Where(r => r.TicketId == TicketId && r.CustomerId == user.Id).FirstOrDefaultAsync();
+
+            if (ticket != null)
+            {
+                ticket.IsDeleted = true;
+                _context.TblTicket.Update(ticket);
+                _context.Entry(ticket).State = EntityState.Modified;
+
+                if (_context.SaveChanges() > 0)
+                {
+                    return View("MyTickets", userTickets).WithSuccess("Info!", "Ticket was deleted successfully!");
+                }
+                else
+                {
+                    return View("MyTickets", userTickets).WithDanger("Info!", "Ticket could not be deleted!");
+                }
+            }
+            else
+            {
+                return View("MyTickets", userTickets).WithDanger("Info!", "Ticket could not be deleted!");
+            }
+
         }
 
         [HttpGet]
@@ -308,7 +366,7 @@ namespace CinemaTicketBooking.Controllers
 
                 ViewData["TotalPrice"] = totalPrice.ToString();
 
-                foreach(var item in reservations)
+                foreach (var item in reservations)
                 {
                     item.IsPaid = true;
                     item.PaymentTypeId = 2;

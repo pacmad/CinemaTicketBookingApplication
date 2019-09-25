@@ -26,10 +26,15 @@
                         <div class="row" style="padding: 20px;">
                             <div class="col-md-7">
                                 <label>Cinema: @Html.DisplayFor(model => model.Cinema.CinemaName)</label>
+                                <br />
                                 <label>Movie genre: @Html.DisplayFor(model => model.MovieGenre.MovieGenreName)</label>
+                                <br />
                                 <label>Release date: @Html.DisplayFor(model => model.ReleaseDate)</label>
+                                <br />
                                 <label>Movie length: @Html.DisplayFor(model => model.MovieLength) mins</label>
+                                <br />
                                 <label>Language: @ViewBag.ShowTime</label>
+                                <br />
                                 <label>Address: @Html.DisplayFor(model => model.Cinema.Adress.Country.CountryName) , @Html.DisplayFor(model => model.Cinema.Adress.City.CityName), @Html.DisplayFor(model => model.Cinema.Adress.StreetName)</label>
                             </div>
                         </div>

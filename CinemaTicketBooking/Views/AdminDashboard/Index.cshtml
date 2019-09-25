@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <a href="/TicketsSold">
+            @*<a href="/TicketsSold">
                 <div class="panel-footer announcement-bottom">
                     <div class="row">
                         <div class="col-xs-6">
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-            </a>
+            </a>*@
         </div>
     </div>
 
@@ -199,6 +199,8 @@
             method: "GET",
             contentType: 'application/json'
         }).done(function (data) {
+
+            console.log(data);
 
             const monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"

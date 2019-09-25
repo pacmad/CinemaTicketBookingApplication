@@ -102,13 +102,15 @@
 
 <script>
     $(function () {
-        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker1').datetimepicker({
+            format: 'dd/MM/yyyy h:mm tt'
+        });
     });
 </script>
 
 @*<div>
-    <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
-</div>*@
+        <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

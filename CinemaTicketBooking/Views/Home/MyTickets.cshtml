@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CinemaTicketBooking.Entities.TblTicket>
+
+@{
+    ViewData["Title"] = "MyTickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+</head>
+
+<div class="container" style="margin-top:20px;">
+    <table id="example" class="table table-bordered table-striped table-nonfluid table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Cinema
+                </th>
+                <th>
+                    Movie
+                </th>
+                <th>
+                    Seat
+                </th>
+                <th>
+                    Show Time
+                </th>
+                <th>
+                    Ticket Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cinema.CinemaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.MovieName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Seat)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.TblShowTime.FirstOrDefault().Time))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    })(jQuery);
+</script>

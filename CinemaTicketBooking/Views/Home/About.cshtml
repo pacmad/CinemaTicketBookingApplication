@@ -1,7 +1,63 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-<img class="img-responsive center-block" width="200" height="200" src="~/images/applogo.png" alt="Chania">
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Metus vulputate eu scelerisque felis imperdiet. Adipiscing vitae proin sagittis nisl rhoncus. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Ultrices dui sapien eget mi proin. Nunc congue nisi vitae suscipit tellus mauris a diam. Nunc eget lorem dolor sed viverra ipsum nunc. Nec dui nunc mattis enim ut. Vehicula ipsum a arcu cursus vitae congue. Pellentesque id nibh tortor id aliquet lectus proin nibh. Nunc congue nisi vitae suscipit tellus mauris. Ut etiam sit amet nisl purus in mollis. Quis viverra nibh cras pulvinar mattis nunc sed blandit libero. Integer eget aliquet nibh praesent tristique magna. Eleifend quam adipiscing vitae proin sagittis..</p>
+
+<link asp-append-version="true"  href="~/css/about.css" rel="stylesheet">
+<!------ Include the above in your HEAD tag ---------->
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<div class="aboutus-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="aboutus">
+                    <h2 class="aboutus-title">About Us</h2>
+                    <p class="aboutus-text">Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.</p>
+                    <p class="aboutus-text">This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem</p>
+                    <a class="aboutus-more" href="#">read more</a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="aboutus-banner">
+                    <img src="~/images/applogo.png" style="width:90%; height:90%;" alt="">
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-6 col-xs-12">
+                <div class="feature">
+                    <div class="feature-box">
+                        <div class="clearfix">
+                            <div class="iconset">
+                                <span class="glyphicon glyphicon-cog icon"></span>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Work with heart</h4>
+                                <p>Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-box">
+                        <div class="clearfix">
+                            <div class="iconset">
+                                <span class="glyphicon glyphicon-cog icon"></span>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Reliable services</h4>
+                                <p>Donec vitae sapien ut libero venenatis faucibu. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-box">
+                        <div class="clearfix">
+                            <div class="iconset">
+                                <span class="glyphicon glyphicon-cog icon"></span>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Great support</h4>
+                                <p>Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
