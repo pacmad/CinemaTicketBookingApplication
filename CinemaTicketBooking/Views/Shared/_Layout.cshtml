@@ -50,7 +50,7 @@
                                     <a asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
                                 </li>
                                 <li>
-                                    <a asp-area="" asp-controller="ManageUsers" asp-action="Index">Manage Users</a>
+                                    <a asp-area="" asp-controller="ManageUsers" asp-action="Index">Users</a>
                                 </li>
                             }
                             else if (User.IsInRole("CinemaAdmin"))
@@ -65,7 +65,7 @@
                             else if (User.IsInRole("SimpleUser"))
                             {
                                 <li>
-                                    <a asp-area="" asp-controller="Home" asp-action="MyTickets">My Tickets</a>
+                                    <a asp-area="" asp-controller="Home" asp-action="MyTickets">Tickets</a>
                                 </li>
                             }
                         }

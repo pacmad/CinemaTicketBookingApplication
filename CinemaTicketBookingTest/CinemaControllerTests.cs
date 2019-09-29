@@ -1,86 +1,111 @@
-﻿using CinemaTicketBooking.Controllers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using CinemaTicketBooking.Entities;
-using CinemaTicketBooking.Models;
-using CinemaTicketBooking.Models.SuperAdminViewModels;
-using CinemaTicketBooking.Repository;
-using Microsoft.AspNetCore.Identity;
-using CinemaTicketBooking.Services;
 using Xunit;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using CinemaTicketBooking.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBookingTest
 {
-    public class CinemaControllerTests
+    public class DbFixture
     {
-        ICinemaService _service;
-        CinemaTicketBookingContext _context;
-        UserManager<ApplicationUser> _userManager;
-        ILogger _logger;
-        CinemasController _controller;
-        IImageHandler _imageHandler;
-
-        public CinemaControllerTests(CinemaTicketBookingContext context,
-            UserManager<ApplicationUser> userManager,
-            ILogger<AccountController> logger,
-            ICinemaService cinemaService,
-            IImageHandler imageHandler)
+        public DbFixture()
         {
-            _service = new CinemaServiceFake();
-            _userManager = userManager;
-            _context = context;
-            _logger = logger;
-            _imageHandler = imageHandler;
-            _controller = new CinemasController(context, userManager, logger, cinemaService, _imageHandler);
+            var serviceCollection = new ServiceCollection();
+            serviceCollection
+                .AddDbContext<CinemaTicketBookingContext>(options => options.UseSqlServer("Server=RINORS-G5;Database=CinemaTicketBooking;User Id=sa; Password=P@ssw0rd;"),
+                    ServiceLifetime.Transient);
+
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+        }
+
+        public ServiceProvider ServiceProvider { get; private set; }
+    }
+
+    public class UnitTest1 : IClassFixture<DbFixture>
+    {
+        private ServiceProvider _serviceProvider;
+
+        public UnitTest1(DbFixture fixture)
+        {
+            _serviceProvider = fixture.ServiceProvider;
         }
 
         [Fact]
-        public void Get_WhenCalled_ReturnsOkResult()
+        public void AddCinemaTest()
         {
-            // Act
-            var okResult = _controller.View();
+            using (var context = _serviceProvider.GetService<CinemaTicketBookingContext>())
+            {
+                TblCinema cinema = new TblCinema()
+                {
+                    CinemaName = "Test cinema",
+                    CinemaDescription = "Test cinema description",
+                    AdminUserId = "fa80f392-58b4-4415-ba40-c118c0651801",
+                    CinemaProfilePicture = "test url",
+                    AdressId = 2,
+                    SeatsRows = 10,
+                    SeatColumns = 30,
+                    CreatedByUserId = "fa80f392-58b4-4415-ba40-c118c0651801",
+                    LastModifiedByUserId = "fa80f392-58b4-4415-ba40-c118c0651801",
+                    CreatedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    LastModifiedOnDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    IsDeleted = false
+                };
 
-            // Assert
-            Assert.IsType<OkObjectResult>(okResult.ViewName);
+                context.TblCinema.Add(cinema);
+
+                var added = context.SaveChanges() > 0;
+
+                Assert.True(added);
+            }
         }
 
         [Fact]
-        public void Get_WhenCalled_ReturnsAllItems()
+        public void GetCinemaTest()
         {
-            // Act
-            var okResult = _controller.ViewData.DefaultIfEmpty() as OkObjectResult;
+            using (var context = _serviceProvider.GetService<CinemaTicketBookingContext>())
+            {
+                var cinemaToGet = context.TblCinema.FirstOrDefault(r => r.CinemaName == "Test cinema");
 
-            // Assert
-            var items = Assert.IsType<List<CinemaViewModel>>(okResult.Value);
-            Assert.Equal(3, items.Count);
+                Assert.True(cinemaToGet != null);
+            }
         }
 
         [Fact]
-        public async Task GetById_UnknownGuidPassed_ReturnsNotFoundResult()
+        public void EditCinemaTest()
         {
-            // Act
-            var notFoundResult = await _controller.Details(1);
+            using (var context = _serviceProvider.GetService<CinemaTicketBookingContext>())
+            {
+                var cinemaToGet = context.TblCinema.FirstOrDefault(r => r.CinemaName == "Test cinema");
 
-            // Assert
-            Assert.IsType<NotFoundResult>(notFoundResult.ToString());
+                if (cinemaToGet != null)
+                {
+                    cinemaToGet.CinemaDescription = "Description has changed";
+                    context.TblCinema.Update(cinemaToGet);
+                    context.Entry(cinemaToGet).State = EntityState.Modified;
+                }
+
+                Assert.True(context.SaveChanges() > 0);
+            }
         }
 
+
         [Fact]
-        public async Task GetById_ExistingGuidPassed_ReturnsOkResult()
+        public void DeleteCinemaTest()
         {
-            // Arrange
-            var id = 53;
+            using (var context = _serviceProvider.GetService<CinemaTicketBookingContext>())
+            {
+                var tblCinema = context.TblCinema.SingleOrDefault(r => r.CinemaName == "Test cinema");
 
-            // Act
-            var okResult = await _controller.DeleteConfirmed(id);
-
-            // Assert
-            Assert.IsType<OkObjectResult>(okResult.ToString());
+                if (tblCinema != null)
+                {
+                    tblCinema.IsDeleted = true;
+                    context.TblCinema.Update(tblCinema);
+                    context.Entry(tblCinema).State = EntityState.Modified;
+                    var deleted = context.SaveChanges() > 0;
+                    Assert.True(deleted);
+                }
+            }
         }
     }
 }
